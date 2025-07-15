@@ -18,11 +18,15 @@ Folder/File explanations
 
 To install dependencies
 
-    pip install --upgrade -r requirements.txt # This will install all of the dependencies in the requirements file
+    <h1> pip install --upgrade -r requirements.txt </h1>
+    
+    <p> This will install all of the dependencies in the requirements file </p>
 
 To initialize results file structure
 
     python Implementations/initialize.py
+
+    This will ensure all directories that are required are created
 
 To run 
 
