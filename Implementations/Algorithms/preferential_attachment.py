@@ -1,0 +1,89 @@
+import networkx as nx
+import tools
+
+def preferential_attachment(G: nx.graph, user: str, k) -> dict:
+    '''
+    Purpose: This function returns users in order of preferential attachment |Γ1(u)| * |Γ1(p)| 
+    Parameters: A bipartite graph, the user to compare and all other users
+    Return: a sorted dict of similar users and their scores
+    '''
+    if k <= 0: raise Exception("Cannot recommend when k <= 0")
+    
+    # Get items that belong to user
+    user_items = tools.extractTuple( G.edges(user) )
+
+    # get users that share items
+    related_users = set(tools.extractTuple( G.edges(user_items) ))
+
+    # number of neighbours with the same items
+    neighboursCounted = {}
+
+    for neighbour in related_users:
+
+        # get neighbours set
+        neighbour_items = set( tools.extractTuple(G.edges(neighbour)) )
+
+        # |Γ1(u)| ∗ |Γ1(p)| 
+        neighboursCounted[neighbour] = len(user_items) * len(neighbour_items)
+
+
+    # sort neighbours by number of items in common with user
+    neighboursSorted = {k: v for k, v in sorted(neighboursCounted.items(), key=lambda item: item[1])}
+
+    # recommendation portion
+
+    # Get items that belong to user
+    user_items = tools.extractTuple( G.edges(user) )
+    
+    # List to recommend
+    recommend = list()
+    while len(recommend) < k and not len(neighboursSorted) == 0:
+        # grab next neighbour
+        neighbour = neighboursSorted.popitem()
+
+        # loop through neighbours items and add to recommended
+        for item in G.edges(neighbour[0]):
+
+            # if not already known
+            if item[1] not in user_items and len(recommend) < k:
+                recommend.append(item[1])
+
+    return recommend
+
+    # get common items
+    # common_items = set(tools.extractTuple( G.edges(related_users) ))
+    
+
+    # # initialize all items to 0
+    # items_ranked = dict.fromkeys(common_items, 0)
+
+    # # loop through each neighbour
+    # for neighbour in related_users:
+        
+    #     # get neighbours items
+    #     neighbour_items = set(tools.extractTuple( G.edges(neighbour) ))
+
+    #     # loop through neighbours items
+    #     for item in neighbour_items:
+
+    #         # increment item by rank amount
+    #         items_ranked[item] += neighboursCounted[neighbour]
+   
+    # #remove known items
+    # try: 
+    #     for item in user_items: items_ranked.pop(item)
+    # except: print('unique item')
+
+    
+    # # sort neighbours by number of items in common with user
+    # items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1])}
+    
+    # # List to recommend
+    # recommend = list()
+    # while len(recommend) < k and not len(items_ranked) == 0:
+
+    #     recommend.append(items_ranked.popitem()[0])
+
+    # # print(recommend)
+
+    # return recommend

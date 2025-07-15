@@ -6,7 +6,7 @@ CONFIG = {
         'SKIPROWS' : 0
     },
     'amazon' : {
-        'DATAPATH' : "Datasets/tgbl-review-v3/amazon_sample2.csv",
+        'DATAPATH' : "Datasets/amazon/amazon_sample2.csv",
         'COLUMN_NAMES' : ["ts","user_id","item_id","rating"],
         'DELIMITER' : ",",
         'SKIPROWS' : 1

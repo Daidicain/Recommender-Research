@@ -9,12 +9,12 @@ COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
 TESTS = ['precision@k','recall@k','maPrecision']
 
 # DATASET = 'movielens'
-DATASET = 'netflix'
-# DATASET = 'amazon'
+# DATASET = 'netflix'
+DATASET = 'amazon'
 
 # directory of the csv's
 directory_list = os.listdir(f'results/csv/validation/{DATASET}/')
-directory_list.sort()
+
 
 
 def test_Results(test):
@@ -45,8 +45,6 @@ def test_Results(test):
             algorithm_results = algorithm_results[test]
 
             A = test_results_file.split("A=")[1].split('_')[0]
-
-            print(A)
 
             yield algorithm_results
 

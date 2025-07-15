@@ -12,9 +12,9 @@ from functools import partial
 VALIDATION_TESTS = False
 
 '''DATASETS'''
-DATASET = 'movielens'
+# DATASET = 'movielens'
 # DATASET = 'netflix'
-# DATASET = 'amazon'
+DATASET = 'amazon'
 # DATASET = 'lastfm'
 
 '''ALGORITHMS'''
@@ -183,7 +183,7 @@ if __name__=="__main__":
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
-        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A}_B1={B1}_B2={B2}.csv')
+        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B1={B1:.2f}_B2={B2:.2f}.csv')
         
     else:
         df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')

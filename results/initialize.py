@@ -1,5 +1,7 @@
 '''
-Purpose: This file ensures all results and subdirectories are created for the main program to output results'''
+Purpose: This file ensures all results and subdirectories are created for the main program to output results
+
+'''
 
 import os
 
@@ -10,9 +12,8 @@ RESULTS_DIRECTORY = [
     "results/csv/validation/amazon/",
     "results/csv/validation/movielens/",
     "results/csv/validation/netflix/",
-    "results/csv/validation/output/",
-    "results/graphs/test/",
-    "results/graphs/validation/",
+    "results/outputs/test/",
+    "results/outputs/validation/",
 ]
 
 for directory_path in RESULTS_DIRECTORY:

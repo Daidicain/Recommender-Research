@@ -18,7 +18,11 @@ Folder/File explanations
 
 To install dependencies
 
-    run command: pip install --upgrade -r requirements.txt
+    pip install --upgrade -r requirements.txt # This will install all of the dependencies in the requirements file
+
+To initialize results file structure
+
+    python Implementations/initialize.py
 
 To run 
 
