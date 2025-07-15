@@ -1,0 +1,29 @@
+{
+    "netflix": {
+        "adamic_adar": 37.11736273765564,
+        "common_neighbours": 9.08251142501831,
+        "jaccard_coefficient": 9.15254521369934,
+        "preferential_attachment": 8.782068967819214,
+        "temporal": 776.9471352100372,
+        "time_score": 8432.639677762985,
+        "link_score": 7441.770185470581
+    },
+    "movielens": {
+        "adamic_adar": 98.81474232673645,
+        "common_neighbours": 13.699277400970459,
+        "jaccard_coefficient": 14.23902940750122,
+        "preferential_attachment": 13.623631000518799,
+        "temporal": 1552.1975300312042,
+        "time_score": 7340.080056190491,
+        "link_score": 9725.609894514084
+    },
+    "amazon": {
+        "adamic_adar": 3.505080223083496,
+        "common_neighbours": 3.420297384262085,
+        "jaccard_coefficient": 3.428502082824707,
+        "preferential_attachment": 3.27620792388916,
+        "temporal": 5.962573289871216,
+        "time_score": 6299.258649110794,
+        "link_score": 6277.500305175781
+    }
+}
