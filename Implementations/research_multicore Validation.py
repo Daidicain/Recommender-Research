@@ -127,15 +127,13 @@ def float_range(start: float, end:float, increment:float):
 
         index += increment
 
-
-for A in float_range(0,1,0.1):
-    if __name__=="__main__":
-        '''
-        Purpose: intializes data then splits users into groups for each processor
-        Parameters: 
-        Results: 
-        '''
-        
+if __name__=="__main__":
+    '''
+    Purpose: intializes data then splits users into groups for each processor
+    Parameters: 
+    Results: 
+    '''
+    for A in float_range(0,1,0.1):
 
         # get initial data
         unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
@@ -207,12 +205,10 @@ for A in float_range(0,1,0.1):
         print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
         if VALIDATION_TESTS:
-
-            df_accuracy.to_csv(f'results/validation/{DATASET}/{SAVE_NAME}_A={A}_B1={B1}_B2={B2}.csv')
-            df_accuracy[df_accuracy['k'] == 10].describe(include='all').to_csv(f'results/validation/{DATASET}/{SAVE_NAME}_describe_A={A}_B1={B1}_B2={B2}.csv')
-
+            df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A}_B1={B1}_B2={B2}.csv')
+        
         else:
-            df_accuracy.to_csv(f'results/csv/{DATASET}/{SAVE_NAME}.csv')
+            df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
 
 
 

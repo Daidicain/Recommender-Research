@@ -166,13 +166,13 @@ if __name__=="__main__":
             df_accuracy['maPrecision'].extend(result['maPrecision'])
 
     # Record time to run
-    with open("results/time_results.json", "r") as file:
+    with open("results/outputs/time_results.json", "r") as file:
         json_file = json.load(file)
        
     if DATASET not in json_file.keys(): json_file[DATASET] = {}
     json_file[DATASET][SAVE_NAME] = time.time()-t1
 
-    with open("results/time_results.json", "w") as file:
+    with open("results/outputs/time_results.json", "w") as file:
         json.dump(json_file, file, indent=4)
 
     # print(df_accuracy)
@@ -183,12 +183,10 @@ if __name__=="__main__":
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
-
-        df_accuracy.to_csv(f'results/validation/{DATASET}/{SAVE_NAME}_A={A}_B1={B1}_B2={B2}.csv')
-        df_accuracy[df_accuracy['k'] == 10].describe(include='all').to_csv(f'results/validation/{DATASET}/{SAVE_NAME}_A={A}_describe_B1={B1}_B2={B2}.csv')
-
+        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A}_B1={B1}_B2={B2}.csv')
+        
     else:
-        df_accuracy.to_csv(f'results/csv/{DATASET}/{SAVE_NAME}.csv')
+        df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
 
 
 
