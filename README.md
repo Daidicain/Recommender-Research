@@ -1,6 +1,6 @@
 # Recommender-Research
 
-Folder/File explanations
+## Folder/File explanations
 
     Datasets/ - Contains all Datasets
 
@@ -16,19 +16,19 @@ Folder/File explanations
         graphs/ - visualization of results
         graph data.py - takes results from csv/ and output graphs in graphs/
 
-To install dependencies
+## To install dependencies
 
-    <h1> pip install --upgrade -r requirements.txt </h1>
+    **pip install --upgrade -r requirements.txt**
     
-    <p> This will install all of the dependencies in the requirements file </p>
+    This will install all of the dependencies in the requirements file
 
-To initialize results file structure
+## To initialize results file structure
 
-    python Implementations/initialize.py
+    **python Implementations/initialize.py**
 
     This will ensure all directories that are required are created
 
-To run 
+## To run 
 
     - open either research.py or research_multicore.py and uncomment only one item from the '''DATASETS''' and '''ALGORITHMS''' respectively.
       This will run the uncommented dataset and algorithm chosen
