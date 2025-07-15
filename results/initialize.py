@@ -12,8 +12,8 @@ RESULTS_DIRECTORY = [
     "results/csv/validation/amazon/",
     "results/csv/validation/movielens/",
     "results/csv/validation/netflix/",
-    "results/outputs/test/",
-    "results/outputs/validation/",
+    "results/output/test/",
+    "results/output/validation/",
 ]
 
 for directory_path in RESULTS_DIRECTORY:

@@ -70,7 +70,7 @@ for dataset in directory_list:
             plt.legend()
 
             # save the figure
-            plt.savefig(f'results/outputs/test/{dataset}_{test}')
+            plt.savefig(f'results/output/test/{dataset}_{test}')
 
             plt.close()
 

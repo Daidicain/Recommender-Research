@@ -49,6 +49,6 @@ def test_Results(test):
             yield algorithm_results
 
 for test in TESTS:
-    pd.concat(test_Results(test), axis=1).to_csv(f'results/outputs/validation/{DATASET}_validation_{test}.csv')
+    pd.concat(test_Results(test), axis=1).to_csv(f'results/output/validation/{DATASET}_validation_{test}.csv')
 
             
