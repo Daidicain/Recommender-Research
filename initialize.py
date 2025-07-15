@@ -1,3 +1,6 @@
+'''
+Purpose: This file ensures all results and subdirectories are created for the main program to output results'''
+
 import os
 
 RESULTS_DIRECTORY = [

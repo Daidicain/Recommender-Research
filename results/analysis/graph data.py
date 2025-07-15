@@ -12,7 +12,7 @@ TESTS = ['precision@k','recall@k','maPrecision']
 COLOURS = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),(1,0,0),(1,0,1),(1,1,0),(1,1,1)]
 
 # directory of the csv's
-directory_list = os.listdir('results/csv/') 
+directory_list = os.listdir('results/csv/test/') 
 
 # each dataset tested
 for dataset in directory_list:
@@ -21,7 +21,7 @@ for dataset in directory_list:
     if not '.' in dataset:
 
         # directory of dataset
-        algorithms_list = os.listdir(f'results/csv/{dataset}/')
+        algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
 
         # Loop through each test type
         for test in TESTS:
@@ -36,7 +36,7 @@ for dataset in directory_list:
                 if '.csv' in algorithm:
 
                     # results path
-                    algorithm_data = f"results/csv/{dataset}/{algorithm}"
+                    algorithm_data = f"results/csv/test/{dataset}/{algorithm}"
 
                     # read results
                     algorithm_results = pd.read_csv(algorithm_data, usecols= COLUMNS)
@@ -70,7 +70,7 @@ for dataset in directory_list:
             plt.legend()
 
             # save the figure
-            plt.savefig(f'results/graphs/{dataset}_{test}')
+            plt.savefig(f'results/outputs/test/{dataset}_{test}')
 
             plt.close()
 
