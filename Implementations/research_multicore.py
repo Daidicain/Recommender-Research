@@ -31,8 +31,7 @@ RANDOM_STATE = 45
 # RANDOM_STATE = 1000
 
 A = 0.1
-B1 = 10
-B2 = 10
+B = 10
 
 # number of cores to use
 CPU_CORES = 12
@@ -131,7 +130,7 @@ if __name__=="__main__":
     if SAVE_NAME == 'preferential_attachment': G, mostRecentDay = preferential_attachment.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'time_score': G, mostRecentDay = time_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'link_score': G, mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'temporal': G, mostRecentDay = temporal.initialize_structures(train, unique_users, unique_items, A, B1, B2)
+    if SAVE_NAME == 'temporal': G, mostRecentDay = temporal.initialize_structures(train, unique_users, unique_items, A, B)
 
     # add time weight edges between users and items
     # mostRecentDay = tools.addTimeWeightEdges(G, train, A, B1, B2)
