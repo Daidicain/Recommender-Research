@@ -32,8 +32,7 @@ RANDOM_STATE = 45
 # RANDOM_STATE = 1000
 
 # A = 0.5
-B1 = 10
-B2 = 10
+B_VALUES = [10,100,1000,10000,100000]
 
 # number of cores to use
 CPU_CORES = 12
@@ -127,88 +126,91 @@ def float_range(start: float, end:float, increment:float):
 
         index += increment
 
+
+
 if __name__=="__main__":
     '''
     Purpose: intializes data then splits users into groups for each processor
     Parameters: 
     Results: 
     '''
-    for A in float_range(0,1,0.1):
+    for B in B_VALUES:
+        for A in float_range(0,1,0.1):
 
-        # get initial data
-        unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
+            # get initial data
+            unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
 
-        print('users: ',len(unique_users),'items: ', len(unique_items))
+            print('users: ',len(unique_users),'items: ', len(unique_items))
 
-        # initialize graph object
-        if SAVE_NAME == 'adamic_adar': G, mostRecentDay = adamic_adar.initialize_structures(train, unique_users, unique_items)
-        if SAVE_NAME == 'common_neighbours': G, mostRecentDay = common_neighbours.initialize_structures(train, unique_users, unique_items)
-        if SAVE_NAME == 'jaccard_coefficient': G, mostRecentDay = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
-        if SAVE_NAME == 'preferential_attachment': G, mostRecentDay = preferential_attachment.initialize_structures(train, unique_users, unique_items)
-        if SAVE_NAME == 'time_score': G, mostRecentDay = time_score.initialize_structures(train, unique_users, unique_items)
-        if SAVE_NAME == 'link_score': G, mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
-        if SAVE_NAME == 'temporal': G, mostRecentDay = temporal.initialize_structures(train, unique_users, unique_items, A, B1, B2)
+            # initialize graph object
+            if SAVE_NAME == 'adamic_adar': G, mostRecentDay = adamic_adar.initialize_structures(train, unique_users, unique_items)
+            if SAVE_NAME == 'common_neighbours': G, mostRecentDay = common_neighbours.initialize_structures(train, unique_users, unique_items)
+            if SAVE_NAME == 'jaccard_coefficient': G, mostRecentDay = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
+            if SAVE_NAME == 'preferential_attachment': G, mostRecentDay = preferential_attachment.initialize_structures(train, unique_users, unique_items)
+            if SAVE_NAME == 'time_score': G, mostRecentDay = time_score.initialize_structures(train, unique_users, unique_items)
+            if SAVE_NAME == 'link_score': G, mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
+            if SAVE_NAME == 'temporal': G, mostRecentDay = temporal.initialize_structures(train, unique_users, unique_items, A, B)
 
-        # add time weight edges between users and items
-        # mostRecentDay = tools.addTimeWeightEdges(G, train, A, B1, B2)
-        # print('edges added')
+            # add time weight edges between users and items
+            # mostRecentDay = tools.addTimeWeightEdges(G, train, A, B1, B2)
+            # print('edges added')
 
-        # This will store testing information
-        df_accuracy = {}
-        df_accuracy['k'] = []
-        df_accuracy['user_id'] = []
-        df_accuracy['precision@k'] = []
-        df_accuracy['recall@k'] = []
-        df_accuracy['maPrecision'] = []
+            # This will store testing information
+            df_accuracy = {}
+            df_accuracy['k'] = []
+            df_accuracy['user_id'] = []
+            df_accuracy['precision@k'] = []
+            df_accuracy['recall@k'] = []
+            df_accuracy['maPrecision'] = []
 
-        # get unique users
+            # get unique users
 
-        # set users to either validation or test
-        if VALIDATION_TESTS:
-            users = validation['user_id'].unique()
-        else:
-            users = test['user_id'].unique()
-        
-        # users = ['u338044']
-        # users = ['u915']
+            # set users to either validation or test
+            if VALIDATION_TESTS:
+                users = validation['user_id'].unique()
+            else:
+                users = test['user_id'].unique()
+            
+            # users = ['u338044']
+            # users = ['u915']
 
-        # split users into groups for each core
-        arguments = []
-        for i in range(CPU_CORES): arguments.append([])
-        for i in range(len(users)): arguments[i%CPU_CORES].append(users[i])
+            # split users into groups for each core
+            arguments = []
+            for i in range(CPU_CORES): arguments.append([])
+            for i in range(len(users)): arguments[i%CPU_CORES].append(users[i])
 
-        t1 = time.time()
-        with mp.Pool(CPU_CORES) as pool:
-            partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items, validation=validation)
-            for result in pool.map(partial_funct, arguments):
-                df_accuracy['k'].extend(result['k'])
-                df_accuracy['user_id'].extend(result['user_id'])
-                df_accuracy['precision@k'].extend(result['precision@k'])
-                df_accuracy['recall@k'].extend(result['recall@k'])
-                df_accuracy['maPrecision'].extend(result['maPrecision'])
+            t1 = time.time()
+            with mp.Pool(CPU_CORES) as pool:
+                partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items, validation=validation)
+                for result in pool.map(partial_funct, arguments):
+                    df_accuracy['k'].extend(result['k'])
+                    df_accuracy['user_id'].extend(result['user_id'])
+                    df_accuracy['precision@k'].extend(result['precision@k'])
+                    df_accuracy['recall@k'].extend(result['recall@k'])
+                    df_accuracy['maPrecision'].extend(result['maPrecision'])
 
-        # Record time to run
-        # with open("results/time_results.json", "r") as file:
-        #     json_file = json.load(file)
-        
-        # if DATASET not in json_file.keys(): json_file[DATASET] = {}
-        # json_file[DATASET][SAVE_NAME] = time.time()-t1
+            # Record time to run
+            # with open("results/time_results.json", "r") as file:
+            #     json_file = json.load(file)
+            
+            # if DATASET not in json_file.keys(): json_file[DATASET] = {}
+            # json_file[DATASET][SAVE_NAME] = time.time()-t1
 
-        # with open("results/time_results.json", "w") as file:
-        #     json.dump(json_file, file, indent=4)
+            # with open("results/time_results.json", "w") as file:
+            #     json.dump(json_file, file, indent=4)
 
-        # print(df_accuracy)
-        # convert from dictionary to a dataframe
-        df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
+            # print(df_accuracy)
+            # convert from dictionary to a dataframe
+            df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
 
-        # print the results
-        print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
+            # print the results
+            print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
-        if VALIDATION_TESTS:
-            df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B1={B1:.2f}_B2={B2:.2f}.csv')
-        
-        else:
-            df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
+            if VALIDATION_TESTS:
+                df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B={B:>5}csv')
+            
+            else:
+                df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
 
 
 

@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 
-def initialize_structures(train, unique_users: np.array, unique_items: np.array, A: float, B1: float, B2:float):
+def initialize_structures(train, unique_users: np.array, unique_items: np.array, A: float, B: float):
     '''
     Purpose: This initializes the graph with users
     Parameters: The dataset and two np.arrays unique_users and unique_items.
@@ -29,8 +29,8 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array,
     mostRecentDay = train['days'].max()
     
     # OUR TEMPORAL FUNCTIONS
-    short_temporal_function = lambda t: (1-A) * (math.e ** -(B1 * (mostRecentDay - t)))
-    long_temporal_function = lambda t: A * (1 - (math.e ** -(B2 * (mostRecentDay - t))))
+    short_temporal_function = lambda t: (1-A) * (math.e ** -(B * (mostRecentDay - t)))
+    long_temporal_function = lambda t: A * (1 - (math.e ** -(B * (mostRecentDay - t))))
 
     # This calculates the edges weight using the formula 1/e^tB
     train['t_weight'] = train['days'].apply( lambda t: short_temporal_function(t) + long_temporal_function(t) )
