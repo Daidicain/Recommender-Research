@@ -137,7 +137,9 @@ def recommender_algorithm(G: nx.graph, train:pd.DataFrame, user: str, k: int) ->
     #remove known items
     try: 
         for item in user_items: items_ranked.pop(item)
-    except: print('unique item')
+    except: 
+        pass
+        # print('unique item')
 
     
     # sort neighbours by number of items in common with user
