@@ -207,7 +207,7 @@ if __name__=="__main__":
             print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
             if VALIDATION_TESTS:
-                df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B={B:>5}csv')
+                df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B={B:>05}.csv')
             
             else:
                 df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')

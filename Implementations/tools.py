@@ -26,7 +26,7 @@ def readData(path: str, column_names: list, random_state: int, delimiter: str, s
     # item nodes need unique ids. add u/i to users/items
     df['user_id'] = 'u' + df['user_id'].astype(str)
     df['item_id'] = 'i' + df['item_id'].astype(str)
-    df['rating'] = df['rating'].astype(int)
+    df['rating'] = df['rating'].astype(float)
     if type(df['ts'][0]) == str:
         df['ts'] = pd.to_datetime( df['ts'].astype(str), yearfirst=True )
         df['ts'] = df['ts'].astype('int64') // 10**9
