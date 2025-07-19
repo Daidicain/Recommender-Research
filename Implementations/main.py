@@ -3,38 +3,12 @@ import time
 import tools
 import os
 import json
+import numpy as np
 
 import multiprocessing as mp
 from functools import partial
 
-'''TYPE OF TEST'''
-# VALIDATION_TESTS = True
-VALIDATION_TESTS = False
-
-'''DATASETS'''
-# DATASET = 'movielens'
-# DATASET = 'netflix'
-DATASET = 'amazon'
-# DATASET = 'lastfm'
-
-'''ALGORITHMS'''
-# SAVE_NAME = 'adamic_adar'
-# SAVE_NAME = 'common_neighbours'
-# SAVE_NAME = 'jaccard_coefficient'
-# SAVE_NAME = 'link_score'
-# SAVE_NAME = 'preferential_attachment'
-SAVE_NAME = 'temporal'
-# SAVE_NAME = 'time_score'
-
-'''Variables'''
-RANDOM_STATE = 45
-# RANDOM_STATE = 1000
-
-A = 0.1
-B = 10
-
-# number of cores to use
-CPU_CORES = 80
+from variables import *
 
 
 '''load data info'''
@@ -45,7 +19,7 @@ COLUMN_NAMES = CONFIG[DATASET]['COLUMN_NAMES']
 DELIMITER = CONFIG[DATASET]['DELIMITER']
 SKIPROWS = CONFIG[DATASET]['SKIPROWS']
 
-
+'''import algorithm module'''
 if SAVE_NAME == 'adamic_adar': import Algorithms.adamic_adar as adamic_adar
 if SAVE_NAME == 'common_neighbours': import Algorithms.common_neighbours as common_neighbours
 if SAVE_NAME == 'jaccard_coefficient': import Algorithms.jaccard_coefficient as jaccard_coefficient
@@ -55,7 +29,7 @@ if SAVE_NAME == 'link_score': import Algorithms.link_score as link_score
 if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
 
 
-def testUsers( users, G, train, test, mostRecentDay, unique_items):
+def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
     '''
     Purpose: runs the tests for a given set of users returning results
     Parameters: 
@@ -75,7 +49,7 @@ def testUsers( users, G, train, test, mostRecentDay, unique_items):
     
 
     for index, user in enumerate(users):
-        print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
+        # print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
 
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
@@ -91,7 +65,11 @@ def testUsers( users, G, train, test, mostRecentDay, unique_items):
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentDay, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
 
-        predict = set(test[test['user_id'] == user]['item_id'].unique())
+        # test either validation or test
+        if VALIDATION_TESTS:
+            predict = set(validation[validation['user_id'] == user]['item_id'].unique())
+        else:
+            predict = set(test[test['user_id'] == user]['item_id'].unique())
         
         for k in range(1,101):
             # get test results
@@ -107,21 +85,19 @@ def testUsers( users, G, train, test, mostRecentDay, unique_items):
             df_accuracy['maPrecision'].append(meanAPrecision)
         
     return df_accuracy
-  
 
 
-if __name__=="__main__":
+def main(A, B):
     '''
     Purpose: intializes data then splits users into groups for each processor
     Parameters: 
     Results: 
     '''
-    
-
     # get initial data
     unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
 
-    print('users: ',len(unique_users),'items: ', len(unique_items))
+    # print('users: ',len(unique_users),'items: ', len(unique_items))
+    print(f'')
 
     # initialize graph object
     if SAVE_NAME == 'adamic_adar': G, mostRecentDay = adamic_adar.initialize_structures(train, unique_users, unique_items)
@@ -145,9 +121,12 @@ if __name__=="__main__":
     df_accuracy['maPrecision'] = []
 
     # get unique users
-    users = test['user_id'].unique()
-    # users = ['u338044']
-    # users = ['u915']
+
+    # set users to either validation or test
+    if VALIDATION_TESTS:
+        users = validation['user_id'].unique()
+    else:
+        users = test['user_id'].unique()
 
     # split users into groups for each core
     arguments = []
@@ -156,7 +135,7 @@ if __name__=="__main__":
 
     t1 = time.time()
     with mp.Pool(CPU_CORES) as pool:
-        partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items)
+        partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items, validation=validation)
         for result in pool.map(partial_funct, arguments):
             df_accuracy['k'].extend(result['k'])
             df_accuracy['user_id'].extend(result['user_id'])
@@ -165,27 +144,39 @@ if __name__=="__main__":
             df_accuracy['maPrecision'].extend(result['maPrecision'])
 
     # Record time to run
-    with open("results/output/time_results.json", "r") as file:
-        json_file = json.load(file)
-       
-    if DATASET not in json_file.keys(): json_file[DATASET] = {}
-    json_file[DATASET][SAVE_NAME] = time.time()-t1
+    if not VALIDATION_TESTS:
+        with open("results/time_results.json", "r") as file:
+            json_file = json.load(file)
+        
+        if DATASET not in json_file.keys(): json_file[DATASET] = {}
+        json_file[DATASET][SAVE_NAME] = time.time()-t1
 
-    with open("results/output/time_results.json", "w") as file:
-        json.dump(json_file, file, indent=4)
+        with open("results/time_results.json", "w") as file:
+            json.dump(json_file, file, indent=4)
 
     # print(df_accuracy)
     # convert from dictionary to a dataframe
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
 
     # print the results
-    print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
+    # print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
         df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B={B:>06}.csv')
     
     else:
         df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
+
+
+
+if __name__=="__main__":
+    if VALIDATION_TESTS:
+        for B_validation in B_VALUES:
+            for A_validation in A_VALUES:
+                main(A_validation,B_validation)
+    else:
+        main(A,B)
+    
 
 
 

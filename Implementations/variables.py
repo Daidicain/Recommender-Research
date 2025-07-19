@@ -1,0 +1,32 @@
+'''VALIDATION TESTS'''
+# VALIDATION_TESTS = True
+VALIDATION_TESTS = False
+
+# B_VALUES = [10,100,1000,10000,100000]
+# A_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
+B_VALUES = [10,100]
+A_VALUES = [0,0.1]
+
+'''DATASETS'''
+# DATASET = 'movielens'
+# DATASET = 'netflix'
+DATASET = 'amazon'
+# DATASET = 'lastfm'
+
+'''ALGORITHMS'''
+# SAVE_NAME = 'adamic_adar'
+# SAVE_NAME = 'common_neighbours'
+# SAVE_NAME = 'jaccard_coefficient'
+# SAVE_NAME = 'link_score'
+# SAVE_NAME = 'preferential_attachment'
+SAVE_NAME = 'temporal'
+# SAVE_NAME = 'time_score'
+
+'''VARIABLES'''
+A = 0.5
+B = 100
+
+'''SYSTEM'''
+CPU_CORES = 12 # number of cores to use
+RANDOM_STATE = 45
+
