@@ -97,7 +97,7 @@ def main(A, B):
     unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
 
     # print('users: ',len(unique_users),'items: ', len(unique_items))
-    print(f'')
+    print(f'A={A}, B={B}')
 
     # initialize graph object
     if SAVE_NAME == 'adamic_adar': G, mostRecentDay = adamic_adar.initialize_structures(train, unique_users, unique_items)
