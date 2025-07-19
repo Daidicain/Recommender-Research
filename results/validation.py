@@ -47,7 +47,7 @@ for test in TESTS:
 
     # print(df_results)
     print(f"a={A}, b={B}")
-    print(df_results['B'], df_results[0.1])
+    print(df_results)
 
     df_results = pd.DataFrame(df_results, columns=df_results.keys())
 
