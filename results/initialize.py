@@ -1,10 +1,11 @@
 '''
-Purpose: This file ensures all results and subdirectories are created for the main program to output results
+Purpose: This file ensures all subdirectories of results are created for the main program to output results
 
 '''
 
 import os
 
+# directories to be created
 RESULTS_DIRECTORY = [
     "results/csv/test/amazon/",
     "results/csv/test/movielens/",
@@ -18,6 +19,11 @@ RESULTS_DIRECTORY = [
     "results/output/validation/netflix/",
 ]
 
+# loop through each directory given
 for directory_path in RESULTS_DIRECTORY:
+
+    # creates directories from a path
     os.makedirs(directory_path, exist_ok=True)
+
+    # confirmation
     print(f"{directory_path} ensured to exist")

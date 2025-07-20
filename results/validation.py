@@ -45,10 +45,9 @@ for test in TESTS:
 
         df_results[A].append(algorithm_results)
 
-    # print(df_results)
-    print(f"a={A}, b={B}")
-    print(df_results)
-
     df_results = pd.DataFrame(df_results, columns=df_results.keys())
 
-    df_results.to_csv(f'results/output/validation/{DATASET}/{test}.csv', index=False)
+    print(df_results)
+
+
+    df_results.to_csv(f'results/output/validation/{DATASET}_{test}.csv', index=False)
