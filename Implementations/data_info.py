@@ -6,7 +6,7 @@ CONFIG = {
         'SKIPROWS' : 0
     },
     'amazon' : {
-        'DATAPATH' : "Datasets/amazon/amazon_sample2.csv",
+        'DATAPATH' : "Datasets/amazon/amazon_sample.csv",
         'COLUMN_NAMES' : ["ts","user_id","item_id","rating"],
         'DELIMITER' : ",",
         'SKIPROWS' : 1
@@ -18,7 +18,7 @@ CONFIG = {
         'SKIPROWS' : 1
     },
     'netflix' : {
-        'DATAPATH' : "Datasets/netflix/netflix_sample2.csv",
+        'DATAPATH' : "Datasets/netflix/netflix_sample.csv",
         'COLUMN_NAMES' : ["item_id","user_id","rating","ts"],
         'DELIMITER' : ",",
         'SKIPROWS' : 1

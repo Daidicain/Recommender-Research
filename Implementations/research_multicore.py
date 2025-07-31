@@ -20,21 +20,30 @@ DATASET = 'amazon'
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
-# SAVE_NAME = 'jaccard_coefficient'
+SAVE_NAME = 'jaccard_coefficient'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
-SAVE_NAME = 'temporal'
+# SAVE_NAME = 'temporal'
 # SAVE_NAME = 'time_score'
 
 '''Variables'''
 RANDOM_STATE = 45
 # RANDOM_STATE = 1000
 
-A = 0.1
-B = 10
+# movie
+# A = 0
+# B = 0.9
+
+# netflix
+A = 0
+B = 0.9
+
+# amazon
+# A = 0.1
+# B = 0.2
 
 # number of cores to use
-CPU_CORES = 80
+CPU_CORES = 12
 
 
 '''load data info'''
