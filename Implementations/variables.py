@@ -3,7 +3,7 @@ VALIDATION_TESTS = True
 # VALIDATION_TESTS = False
 
 # B_VALUES = [10,100,1000,10000,100000]
-B_VALUES = [1000000, 10000000, 100000000]
+B_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
 A_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
 
 '''DATASETS'''
@@ -23,7 +23,7 @@ SAVE_NAME = 'temporal'
 
 '''VARIABLES'''
 A = 0.5
-B = 100
+B = 0.1
 
 '''SYSTEM'''
 CPU_CORES = 12 # number of cores to use
