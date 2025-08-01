@@ -13,8 +13,8 @@ VALIDATION_TESTS = False
 
 '''DATASETS'''
 # DATASET = 'movielens'
-# DATASET = 'netflix'
-DATASET = 'amazon'
+DATASET = 'netflix'
+# DATASET = 'amazon'
 # DATASET = 'lastfm'
 
 '''ALGORITHMS'''

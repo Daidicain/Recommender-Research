@@ -12,6 +12,25 @@ import numpy as np
 import networkx as nx
 import math
 
+def user_split(df, unique_users, random_state):
+    '''
+    purpose: splits each user into 3 sets train, test, and validation
+    parameters: dataframe, all users, and the random state
+    return: 3 sets train, test, and validation
+    '''
+    for user in unique_users:
+        user_entries = df[df['user_id'] == user] # get entries that belong to user
+
+        number_of_training = round(len(user_entries)*0.6) # find number of first entries
+
+        train = user_entries.head(number_of_training) # first 60% of entries is train
+
+        test_validation_set = user_entries.tail( len(user_entries) - number_of_training) # get remaining items
+
+        test, validation = train_test_split(test_validation_set, test_size=0.5, random_state=random_state) # split remaining items randomly to find test and validation
+  
+        yield train, test, validation
+
 def readData(path: str, column_names: list, random_state: int, delimiter: str, skiprows: int):
     '''
     Purpose: reads data from csv file and returns the data
@@ -20,38 +39,27 @@ def readData(path: str, column_names: list, random_state: int, delimiter: str, s
     '''
     # read data file
     df = pd.read_csv(path, delimiter=delimiter, encoding="utf-8", names=column_names, skiprows=skiprows)
-    print("total rows: ", len(df))
-    # print(df)
 
     # item nodes need unique ids. add u/i to users/items
     df['user_id'] = 'u' + df['user_id'].astype(str)
     df['item_id'] = 'i' + df['item_id'].astype(str)
     df['rating'] = df['rating'].astype(float)
-    if type(df['ts'][0]) == str:
-        df['ts'] = pd.to_datetime( df['ts'].astype(str), yearfirst=True )
-        df['ts'] = df['ts'].astype('int64') // 10**9
-        print(df)
-
-    else: df['ts'] = df['ts'].astype(int)
-    # 
-
-    min_ts = df['ts'].max() - 157_784_760 # 5 years
-    # min_ts = df['ts'].max() - 31,556,926
-    df = df[df['ts'] >= min_ts]
-    print("1 year of rows: ",len(df))
-
-    # filter to specific ratings
-    # df = df[ df['rating'].isin([3,4,5]) ]
-
-    # split the data into two sets train and test
-    train, test = train_test_split(df, test_size=0.2, random_state=random_state)
-
-    # split train into test sets train and validation
-    train, validation = train_test_split(train, test_size=0.25, random_state=random_state)
+    df['ts'] = df['ts'].astype(int)
 
     # all unique users and items for train set
     unique_users = df['user_id'].unique()
     unique_items = df['item_id'].unique()
+
+    print("total rows: ", len(df))
+
+    df = df.sort_values(by='ts')
+
+    users_split = list(user_split(df, unique_users, random_state)) # list of tuples [(train,test,validation), ...]
+    
+    train = pd.concat([list_of_tuples[0] for list_of_tuples in users_split]) # combines all training sets
+    test = pd.concat([list_of_tuples[1] for list_of_tuples in users_split]) # combines all test sets
+    validation = pd.concat([list_of_tuples[2] for list_of_tuples in users_split]) # combines all validation sets
+
 
     return unique_users, unique_items, test, train, validation
 
