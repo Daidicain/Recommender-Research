@@ -37,7 +37,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
 
     return G, train['years'].max()
 
-@njit(parallel=True, locals={
+@njit(parallel=False, locals={
     'latest_time': int64,
     'oldest_time': int64,
     'recency': int64,

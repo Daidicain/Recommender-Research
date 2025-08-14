@@ -1,21 +1,21 @@
 import pandas as pd
 import tools
-
+print("hello world")
 
 
 '''DATASETS'''
-DATASET = 'movielens'
-# DATASET = 'amazon'
+# DATASET = 'movielens'
+DATASET = 'amazon'
 # DATASET = 'netflix'
 # DATASET = 'lastfm'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
-# SAVE_NAME = 'common_neighbours'
+SAVE_NAME = 'common_neighbours'
 # SAVE_NAME = 'jaccard_coefficient'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
-SAVE_NAME = 'temporal'
+# SAVE_NAME = 'temporal'
 # SAVE_NAME = 'time_score'
 # SAVE_NAME = 'ts'
 
@@ -36,7 +36,6 @@ DATAPATH = CONFIG[DATASET]['DATAPATH']
 COLUMN_NAMES = CONFIG[DATASET]['COLUMN_NAMES']
 DELIMITER = CONFIG[DATASET]['DELIMITER']
 SKIPROWS = CONFIG[DATASET]['SKIPROWS']
-
 
 
 

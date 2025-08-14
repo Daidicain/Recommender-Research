@@ -49,7 +49,7 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
     
 
     for index, user in enumerate(users):
-        # print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
+        print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
 
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
@@ -145,13 +145,13 @@ def main(A, B):
 
     # Record time to run
     if not VALIDATION_TESTS:
-        with open("results/time_results.json", "r") as file:
+        with open("results/output/time_results.json", "r") as file:
             json_file = json.load(file)
         
         if DATASET not in json_file.keys(): json_file[DATASET] = {}
         json_file[DATASET][SAVE_NAME] = time.time()-t1
 
-        with open("results/time_results.json", "w") as file:
+        with open("results/output/time_results.json", "w") as file:
             json.dump(json_file, file, indent=4)
 
     # print(df_accuracy)

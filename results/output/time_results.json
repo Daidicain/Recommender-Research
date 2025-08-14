@@ -1,29 +1,29 @@
 {
     "netflix": {
-        "adamic_adar": 37.11736273765564,
-        "common_neighbours": 9.08251142501831,
-        "jaccard_coefficient": 12.93667459487915,
-        "preferential_attachment": 8.782068967819214,
-        "temporal": 1427.2452852725983,
-        "time_score": 8432.639677762985,
-        "link_score": 7441.770185470581
+        "adamic_adar": 22.808061122894287,
+        "common_neighbours": 10.44512939453125,
+        "jaccard_coefficient": 10.784368991851807,
+        "preferential_attachment": 0,
+        "temporal": 0,
+        "time_score": 1643.4222557544708,
+        "link_score": 1687.001445531845
     },
     "movielens": {
-        "adamic_adar": 98.81474232673645,
-        "common_neighbours": 13.699277400970459,
-        "jaccard_coefficient": 11.791525840759277,
-        "preferential_attachment": 13.623631000518799,
-        "temporal": 1049.9994461536407,
-        "time_score": 7340.080056190491,
-        "link_score": 9725.609894514084
+        "adamic_adar": 21.132760286331177,
+        "common_neighbours": 11.368555784225464,
+        "jaccard_coefficient": 11.780229330062866,
+        "preferential_attachment": 0,
+        "temporal": 0,
+        "time_score": 830.6350202560425,
+        "link_score": 938.7078931331635
     },
     "amazon": {
-        "adamic_adar": 3.505080223083496,
-        "common_neighbours": 3.420297384262085,
-        "jaccard_coefficient": 3.9589056968688965,
-        "preferential_attachment": 3.27620792388916,
-        "temporal": 4.733642816543579,
-        "time_score": 6299.258649110794,
-        "link_score": 6277.500305175781
+        "adamic_adar": 4.6320717334747314,
+        "common_neighbours": 4.4970104694366455,
+        "jaccard_coefficient": 4.7271668910980225,
+        "preferential_attachment": 0,
+        "temporal": 0,
+        "time_score": 5096.492602109909,
+        "link_score": 4391.533004760742
     }
 }
