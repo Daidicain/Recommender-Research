@@ -1,7 +1,34 @@
 import networkx as nx
+import numpy as np
 import tools
 
-def preferential_attachment(G: nx.graph, user: str, k) -> dict:
+def initialize_structures(train, unique_users: np.array, unique_items: np.array):
+    '''
+    Purpose: This initializes the graph with users
+    Parameters: The dataset and two np.arrays unique_users and unique_items.
+    Return: a fully initiallized nx.graph
+    '''
+    # create graph object
+    G = nx.Graph()
+
+    # add user nodes
+    G.add_nodes_from( unique_users, bipartite=0)
+    # add item nodes.
+    G.add_nodes_from( unique_items, bipartite=1) 
+     
+    print('graph created')
+    
+    # format edges as tuples
+    ratings = list(zip(train.user_id, train.item_id, train.rating))
+
+    # add edges between users and items
+    G.add_weighted_edges_from(ratings, 'rating')
+
+    print('edges added')
+
+    return G, None
+
+def recommender_algorithm(G: nx.graph, user: str, k) -> dict:
     '''
     Purpose: This function returns users in order of preferential attachment |Γ1(u)| * |Γ1(p)| 
     Parameters: A bipartite graph, the user to compare and all other users
