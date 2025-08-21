@@ -65,11 +65,9 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentDay, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
 
-        # test either validation or test
+        predict = set(validation[validation['user_id'] == user]['item_id'].unique())
         if VALIDATION_TESTS:
-            predict = set(validation[validation['user_id'] == user]['item_id'].unique())
-        else:
-            predict = set(test[test['user_id'] == user]['item_id'].unique())
+            predict = predict.union(set(test[test['user_id'] == user]['item_id'].unique()))
         
         for k in range(1,101):
             # get test results

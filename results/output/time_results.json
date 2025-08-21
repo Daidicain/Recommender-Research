@@ -18,12 +18,12 @@
         "link_score": 938.7078931331635
     },
     "amazon": {
-        "adamic_adar": 4.6320717334747314,
-        "common_neighbours": 4.4970104694366455,
-        "jaccard_coefficient": 4.7271668910980225,
-        "preferential_attachment": 0,
-        "temporal": 0,
-        "time_score": 5096.492602109909,
-        "link_score": 4391.533004760742
+        "adamic_adar": 3.505080223083496,
+        "common_neighbours": 3.420297384262085,
+        "jaccard_coefficient": 3.9589056968688965,
+        "preferential_attachment": 2.999762535095215,
+        "temporal": 4.733642816543579,
+        "time_score": 6299.258649110794,
+        "link_score": 6277.500305175781
     }
 }
