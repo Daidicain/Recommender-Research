@@ -65,11 +65,9 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentDay, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
 
-        # test either validation or test
+        predict = set(validation[validation['user_id'] == user]['item_id'].unique())
         if VALIDATION_TESTS:
-            predict = set(validation[validation['user_id'] == user]['item_id'].unique())
-        else:
-            predict = set(test[test['user_id'] == user]['item_id'].unique())
+            predict = predict.union(set(test[test['user_id'] == user]['item_id'].unique()))
         
         for k in range(1,101):
             # get test results
@@ -145,13 +143,13 @@ def main(A, B):
 
     # Record time to run
     if not VALIDATION_TESTS:
-        with open("results/time_results.json", "r") as file:
+        with open("results/output/time_results.json", "r") as file:
             json_file = json.load(file)
         
         if DATASET not in json_file.keys(): json_file[DATASET] = {}
         json_file[DATASET][SAVE_NAME] = time.time()-t1
 
-        with open("results/time_results.json", "w") as file:
+        with open("results/output/time_results.json", "w") as file:
             json.dump(json_file, file, indent=4)
 
     # print(df_accuracy)
