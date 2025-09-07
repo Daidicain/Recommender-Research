@@ -61,8 +61,8 @@ def _temporalWeight(train:pd.DataFrame, user1: str, user2: str) -> float:
     df2 = train[train['user_id']==user2][['item_id', 't_weight']]
 
     # intersection of items
-    df1 = df1[ df1['item_id'].isin(df2['item_id'])]
-    df2 = df2[ df2['item_id'].isin(df1['item_id'])]
+    # df1 = df1[ df1['item_id'].isin(df2['item_id'])]
+    # df2 = df2[ df2['item_id'].isin(df1['item_id'])]
 
     df1 = df1.set_index('item_id').transpose()
     df2 = df2.set_index('item_id').transpose()
@@ -75,10 +75,12 @@ def _temporalWeight(train:pd.DataFrame, user1: str, user2: str) -> float:
     # df2 = train[train['user_id']==user2][['item_id', 't_weight']].set_index('item_id').transpose()
 
     combined_df = pd.concat([df1, df2], ignore_index=True)
-    # print(combined_df)
     
     
     combined_df = combined_df.fillna(0)
+    # print(df1)
+    # print(df2)
+    # print(combined_df)
     # print(math.e ** (-np.linalg.norm(combined_df.iloc[0]-combined_df.iloc[1])))
     return math.e ** (-np.linalg.norm(combined_df.iloc[0] - combined_df.iloc[[1]]))
 

@@ -12,10 +12,10 @@ DATASET = 'movielens'
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
-# SAVE_NAME = 'jaccard_coefficient'
+SAVE_NAME = 'jaccard_coefficient'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
-SAVE_NAME = 'temporal'
+# SAVE_NAME = 'temporal'
 # SAVE_NAME = 'time_score'
 # SAVE_NAME = 'ts'
 
@@ -69,7 +69,7 @@ if __name__=="__main__":
     if SAVE_NAME == 'preferential_attachment': G, mostRecentYear = preferential_attachment.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'time_score': G, mostRecentYear = time_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'link_score': G, mostRecentYear = link_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'temporal': G, mostRecentYear = temporal.initialize_structures(train, unique_users, unique_items, A, B1, B2)
+    if SAVE_NAME == 'temporal': G, mostRecentYear = temporal.initialize_structures(train, unique_users, unique_items, A, B1)
 
     # This will store testing information
     df_accuracy = {}

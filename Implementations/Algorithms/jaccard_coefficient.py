@@ -56,66 +56,68 @@ def recommender_algorithm(G: nx.graph, user: str, k: int) -> dict:
 
         neighboursCounted[neighbour] = jaccardCoefficient
 
-    # remove user from list
-    neighboursCounted.pop(user)
+    # # remove user from list
+    # neighboursCounted.pop(user)
 
-    # sort neighbours by number of items in common with user
-    neighboursSorted = {k: v for k, v in sorted(neighboursCounted.items(), key=lambda item: item[1])}
-
-    # recommendation portion
-
-    # Get items that belong to user
-    user_items = tools.extractTuple( G.edges(user) )
-    
-    # List to recommend
-    recommend = list()
-    while len(recommend) < k and not len(neighboursSorted) == 0:
-        # grab next neighbour
-        neighbour = neighboursSorted.popitem()
-
-        # loop through neighbours items and add to recommended
-        for item in G.edges(neighbour[0]):
-
-            # if not already known
-            if item[1] not in user_items and len(recommend) < k:
-                recommend.append(item[1])
-
-    return recommend
-
-    # get common items
-    # common_items = set(tools.extractTuple( G.edges(related_users) ))
-    
-
-    # # initialize all items to 0
-    # items_ranked = dict.fromkeys(common_items, 0)
-
-    # # loop through each neighbour
-    # for neighbour in related_users:
-        
-    #     # get neighbours items
-    #     neighbour_items = set(tools.extractTuple( G.edges(neighbour) ))
-
-    #     # loop through neighbours items
-    #     for item in neighbour_items:
-
-    #         # increment item by rank amount
-    #         items_ranked[item] += neighboursCounted[neighbour]
-   
-    # #remove known items
-    # try: 
-    #     for item in user_items: items_ranked.pop(item)
-    # except: print('unique item')
-
-    
     # # sort neighbours by number of items in common with user
-    # items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1])}
+    # neighboursSorted = {k: v for k, v in sorted(neighboursCounted.items(), key=lambda item: item[1])}
+
+    # # recommendation portion
+
+    # # Get items that belong to user
+    # user_items = tools.extractTuple( G.edges(user) )
     
     # # List to recommend
     # recommend = list()
-    # while len(recommend) < k and not len(items_ranked) == 0:
+    # while len(recommend) < k and not len(neighboursSorted) == 0:
+    #     # grab next neighbour
+    #     neighbour = neighboursSorted.popitem()
 
-    #     recommend.append(items_ranked.popitem()[0])
+    #     # loop through neighbours items and add to recommended
+    #     for item in G.edges(neighbour[0]):
 
-    # # print(recommend)
+    #         # if not already known
+    #         if item[1] not in user_items and len(recommend) < k:
+    #             recommend.append(item[1])
 
     # return recommend
+
+    # get common items
+    common_items = set(tools.extractTuple( G.edges(related_users) ))
+    
+
+    # initialize all items to 0
+    items_ranked = dict.fromkeys(common_items, 0)
+
+    # loop through each neighbour
+    for neighbour in related_users:
+        
+        # get neighbours items
+        neighbour_items = set(tools.extractTuple( G.edges(neighbour) ))
+
+        # loop through neighbours items
+        for item in neighbour_items:
+
+            # increment item by rank amount
+            items_ranked[item] += neighboursCounted[neighbour]
+   
+    #remove known items
+    try: 
+        for item in user_items: items_ranked.pop(item)
+    except: 
+        pass
+        # print('unique item')
+
+    
+    # sort neighbours by number of items in common with user
+    items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1])}
+    
+    # List to recommend
+    recommend = list()
+    while len(recommend) < k and not len(items_ranked) == 0:
+
+        recommend.append(items_ranked.popitem()[0])
+
+    # print(recommend)
+
+    return recommend
