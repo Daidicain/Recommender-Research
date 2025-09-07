@@ -22,6 +22,9 @@ for dataset in directory_list:
 
         # directory of dataset
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
+        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv']
+        print(algorithms_list)
+        input()
 
         # Loop through each test type
         for test in TESTS:
@@ -61,7 +64,7 @@ for dataset in directory_list:
             
 
             # Naming the x-axis, y-axis and the whole graph
-            plt.title(f'{dataset}\n{test}')
+            # plt.title(f'{dataset}\n{test}')
             plt.xlabel("k")
             plt.ylabel("Accuracy (%)")
             # plt.title(test)
