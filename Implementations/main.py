@@ -27,9 +27,10 @@ if SAVE_NAME == 'preferential_attachment': import Algorithms.preferential_attach
 if SAVE_NAME == 'time_score': import Algorithms.time_score as time_score
 if SAVE_NAME == 'link_score': import Algorithms.link_score as link_score
 if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
+if SAVE_NAME == 'window': import Algorithms.window as window
 
 
-def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
+def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, df):
     '''
     Purpose: runs the tests for a given set of users returning results
     Parameters: 
@@ -49,7 +50,7 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
     
 
     for index, user in enumerate(users):
-        # print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
+        print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
 
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
@@ -64,6 +65,8 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items):
         if SAVE_NAME == 'time_score': recommendations = time_score.recommender_algorithm(train, user, unique_items, mostRecentDay, 0.5, 100)
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentDay, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
+        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, train, user, 100)
+        
 
         predict = set(validation[validation['user_id'] == user]['item_id'].unique())
         if VALIDATION_TESTS:
@@ -97,14 +100,19 @@ def main(A, B):
     # print('users: ',len(unique_users),'items: ', len(unique_items))
     print(f'A={A}, B={B}')
 
+    G = None
+    mostRecentDay = None
+    df =None
+
     # initialize graph object
-    if SAVE_NAME == 'adamic_adar': G, mostRecentDay = adamic_adar.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'common_neighbours': G, mostRecentDay = common_neighbours.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'jaccard_coefficient': G, mostRecentDay = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'preferential_attachment': G, mostRecentDay = preferential_attachment.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'adamic_adar': G = adamic_adar.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'common_neighbours': G = common_neighbours.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'jaccard_coefficient': G = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'preferential_attachment': G = preferential_attachment.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'time_score': G, mostRecentDay = time_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'link_score': G, mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'temporal': G, mostRecentDay = temporal.initialize_structures(train, unique_users, unique_items, A, B)
+    if SAVE_NAME == 'link_score': mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B)
+    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, unique_items, 10000 )
 
     # add time weight edges between users and items
     # mostRecentDay = tools.addTimeWeightEdges(G, train, A, B1, B2)
@@ -133,7 +141,7 @@ def main(A, B):
 
     t1 = time.time()
     with mp.Pool(CPU_CORES) as pool:
-        partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items, validation=validation)
+        partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items, validation=validation, df=df)
         for result in pool.map(partial_funct, arguments):
             df_accuracy['k'].extend(result['k'])
             df_accuracy['user_id'].extend(result['user_id'])

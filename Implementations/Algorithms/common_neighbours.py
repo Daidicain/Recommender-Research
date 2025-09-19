@@ -27,7 +27,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
 
     print('edges added')
 
-    return G, None
+    return G
 
 # def common_neighbours(train: pd.DataFrame, user: str, user_items: pd.DataFrame, k: int) -> dict:
 #     '''

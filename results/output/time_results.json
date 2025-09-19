@@ -2,26 +2,28 @@
     "netflix": {
         "adamic_adar": 37.11736273765564,
         "common_neighbours": 9.08251142501831,
-        "jaccard_coefficient": 12.93667459487915,
+        "jaccard_coefficient": 24.87958550453186,
         "preferential_attachment": 8.782068967819214,
         "temporal": 1427.2452852725983,
         "time_score": 8432.639677762985,
-        "link_score": 7441.770185470581
+        "link_score": 7441.770185470581,
+        "window": 7011.913688182831
     },
     "movielens": {
         "adamic_adar": 98.81474232673645,
         "common_neighbours": 13.699277400970459,
-        "jaccard_coefficient": 11.791525840759277,
-        "preferential_attachment": 13.623631000518799,
+        "jaccard_coefficient": 25.87151598930359,
+        "preferential_attachment": 24.225165843963623,
         "temporal": 1049.9994461536407,
         "time_score": 7340.080056190491,
-        "link_score": 9725.609894514084
+        "link_score": 9725.609894514084,
+        "window": 3087.000544309616
     },
     "amazon": {
         "adamic_adar": 3.505080223083496,
         "common_neighbours": 3.420297384262085,
         "jaccard_coefficient": 3.9589056968688965,
-        "preferential_attachment": 2.999762535095215,
+        "preferential_attachment": 4.474560260772705,
         "temporal": 4.733642816543579,
         "time_score": 6299.258649110794,
         "link_score": 6277.500305175781

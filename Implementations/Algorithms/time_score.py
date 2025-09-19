@@ -18,7 +18,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
     train['datetime'] = pd.to_datetime(train['ts'], unit='s', origin='unix')
     train['years'] = train['datetime'].dt.year
 
-    return None, train['years'].max()
+    return train['years'].max()
 
 
 @njit(parallel=False, locals={

@@ -26,7 +26,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
 
     print('edges added')
 
-    return G, None
+    return G
 
 def recommender_algorithm(G: nx.graph, user: str, k) -> dict:
     '''
