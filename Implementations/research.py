@@ -11,8 +11,9 @@ DATASET = 'amazon'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
-SAVE_NAME = 'common_neighbours'
+# SAVE_NAME = 'common_neighbours'
 # SAVE_NAME = 'jaccard_coefficient'
+SAVE_NAME = 'window'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -52,6 +53,7 @@ if SAVE_NAME == 'preferential_attachment': import Algorithms.preferential_attach
 if SAVE_NAME == 'time_score': import Algorithms.time_score as time_score
 if SAVE_NAME == 'link_score': import Algorithms.link_score as link_score
 if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
+if SAVE_NAME == 'window': import Algorithms.window as window
 
 
 if __name__=="__main__":
@@ -61,14 +63,19 @@ if __name__=="__main__":
 
     print('users: ',len(unique_users),'items: ', len(unique_items))
 
+    G=None
+    mostRecentYear = None
+    df = None
+    
     # initialize graph object
-    if SAVE_NAME == 'adamic_adar': G, mostRecentYear = adamic_adar.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'common_neighbours': G, mostRecentYear = common_neighbours.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'jaccard_coefficient': G, mostRecentYear = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'preferential_attachment': G, mostRecentYear = preferential_attachment.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'adamic_adar': G = adamic_adar.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'common_neighbours': G = common_neighbours.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'jaccard_coefficient': G = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
+    if SAVE_NAME == 'preferential_attachment': G = preferential_attachment.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'time_score': G, mostRecentYear = time_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'link_score': G, mostRecentYear = link_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'temporal': G, mostRecentYear = temporal.initialize_structures(train, unique_users, unique_items, A, B1)
+    if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B1)
+    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, unique_items, 40 )
 
     # This will store testing information
     df_accuracy = {}
@@ -94,6 +101,8 @@ if __name__=="__main__":
         if SAVE_NAME == 'time_score': recommendations = time_score.recommender_algorithm(train, user, unique_items, mostRecentYear, 0.5, 100)
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentYear, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
+        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, train, user, 100)
+    
 
         predict = set(test[test['user_id'] == user]['item_id'].unique())
         
@@ -107,6 +116,8 @@ if __name__=="__main__":
         df_accuracy["precision@k"].append(precisionAtK)
         df_accuracy['recall@k'].append(recallAtK)
         df_accuracy['maPrecision'].append(meanAPrecision)
+
+        # print(df_accuracy)
         
 
     # convert from dictionary to a dataframe

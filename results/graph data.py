@@ -22,7 +22,7 @@ for dataset in directory_list:
 
         # directory of dataset
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
-        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv']
+        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv', 'window.csv', 'window1.csv', 'window2.csv', 'window3.csv']
         print(algorithms_list)
         input()
 
@@ -35,32 +35,34 @@ for dataset in directory_list:
             # loop through each algorithm results
             for algorithm in algorithms_list:
                 
-                # check if csv file
-                if '.csv' in algorithm:
+                try:
+                    # check if csv file
+                    if '.csv' in algorithm:
 
-                    # results path
-                    algorithm_data = f"results/csv/test/{dataset}/{algorithm}"
+                        # results path
+                        algorithm_data = f"results/csv/test/{dataset}/{algorithm}"
 
-                    # read results
-                    algorithm_results = pd.read_csv(algorithm_data, usecols= COLUMNS)
+                        # read results
+                        algorithm_results = pd.read_csv(algorithm_data, usecols= COLUMNS)
 
-                    # get x axis = k
-                    k = algorithm_results['k'].unique()
+                        # get x axis = k
+                        k = algorithm_results['k'].unique()
 
-                    # get averages for each
-                    algorithm_results = algorithm_results.groupby('k')[['precision@k', 'recall@k', 'maPrecision']].mean()
+                        # get averages for each
+                        algorithm_results = algorithm_results.groupby('k')[['precision@k', 'recall@k', 'maPrecision']].mean()
 
-                    # convert from decimal to percent
-                    algorithm_results = algorithm_results[['precision@k', 'recall@k', 'maPrecision']] * 100
- 
-                    # get test
-                    algorithm_test = algorithm_results[test]
+                        # convert from decimal to percent
+                        algorithm_results = algorithm_results[['precision@k', 'recall@k', 'maPrecision']] * 100
+    
+                        # get test
+                        algorithm_test = algorithm_results[test]
 
-                    # Plotting both the curves simultaneously
-                    plt.plot(k, algorithm_test, color=COLOURS[colour], label=algorithm.split('.')[0])
+                        # Plotting both the curves simultaneously
+                        plt.plot(k, algorithm_test, color=COLOURS[colour], label=algorithm.split('.')[0])
 
-                    # increment colour
-                    colour += 1
+                        # increment colour
+                        colour += 1
+                except: pass
             
 
             # Naming the x-axis, y-axis and the whole graph

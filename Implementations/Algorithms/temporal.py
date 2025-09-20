@@ -47,7 +47,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array,
     G.add_weighted_edges_from(timeStampEdges, 'ts')
     G.add_weighted_edges_from(ratings, 'rating')
 
-    return G, None
+    return G
 
 def _temporalWeight(train:pd.DataFrame, user1: str, user2: str) -> float:
     '''
