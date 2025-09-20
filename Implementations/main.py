@@ -112,7 +112,7 @@ def main(A, B):
     if SAVE_NAME == 'time_score': G, mostRecentDay = time_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'link_score': mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B)
-    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, unique_items, 10000 )
+    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, unique_items, A )
 
     # add time weight edges between users and items
     # mostRecentDay = tools.addTimeWeightEdges(G, train, A, B1, B2)

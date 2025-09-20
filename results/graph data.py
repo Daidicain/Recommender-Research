@@ -22,7 +22,7 @@ for dataset in directory_list:
 
         # directory of dataset
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
-        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv', 'window.csv', 'window2.csv', 'window3.csv']
+        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv', 'window.csv', 'window1.csv', 'window2.csv', 'window3.csv']
         print(algorithms_list)
         input()
 

@@ -4,9 +4,9 @@ import tools
 
 
 '''DATASETS'''
-# DATASET = 'movielens'
+DATASET = 'movielens'
 # DATASET = 'amazon'
-DATASET = 'netflix'
+# DATASET = 'netflix'
 # DATASET = 'lastfm'
 
 '''ALGORITHMS'''

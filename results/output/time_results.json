@@ -2,7 +2,7 @@
     "netflix": {
         "adamic_adar": 37.11736273765564,
         "common_neighbours": 9.08251142501831,
-        "jaccard_coefficient": 24.87958550453186,
+        "jaccard_coefficient": 26.720115900039673,
         "preferential_attachment": 8.782068967819214,
         "temporal": 1427.2452852725983,
         "time_score": 8432.639677762985,
@@ -17,7 +17,7 @@
         "temporal": 1049.9994461536407,
         "time_score": 7340.080056190491,
         "link_score": 9725.609894514084,
-        "window": 3087.000544309616
+        "window": 3109.0837721824646
     },
     "amazon": {
         "adamic_adar": 3.505080223083496,
