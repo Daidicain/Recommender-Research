@@ -7,9 +7,9 @@ COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
 # the different tests that were run
 TESTS = ['precision@k','recall@k','maPrecision']
 
-# DATASET = 'movielens'
+DATASET = 'movielens'
 # DATASET = 'netflix'
-DATASET = 'amazon'
+# DATASET = 'amazon'
 
 # directory of the csv's
 directory_list = os.listdir(f'results/csv/validation/{DATASET}/')           

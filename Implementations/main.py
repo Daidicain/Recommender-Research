@@ -168,7 +168,7 @@ def main(A, B):
     # print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
-        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B={B:.2f}.csv')
+        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={B}_A={A}.csv')
     
     else:
         df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
