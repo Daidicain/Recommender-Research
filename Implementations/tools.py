@@ -60,7 +60,6 @@ def readData(path: str, column_names: list, random_state: int, delimiter: str, s
     test = pd.concat([list_of_tuples[1] for list_of_tuples in users_split]) # combines all test sets
     validation = pd.concat([list_of_tuples[2] for list_of_tuples in users_split]) # combines all validation sets
 
-
     return unique_users, unique_items, test, train, validation
 
 def createBipartiteGraph( unique_users: np.array, unique_items: np.array) -> nx.Graph:
