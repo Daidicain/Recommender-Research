@@ -75,7 +75,7 @@ if __name__=="__main__":
     if SAVE_NAME == 'time_score': G, mostRecentYear = time_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'link_score': G, mostRecentYear = link_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B1)
-    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, unique_items, 40 )
+    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, 40 )
 
     # This will store testing information
     df_accuracy = {}
@@ -101,7 +101,7 @@ if __name__=="__main__":
         if SAVE_NAME == 'time_score': recommendations = time_score.recommender_algorithm(train, user, unique_items, mostRecentYear, 0.5, 100)
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentYear, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
-        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, train, user, 100)
+        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, user, 100)
     
 
         predict = set(test[test['user_id'] == user]['item_id'].unique())
