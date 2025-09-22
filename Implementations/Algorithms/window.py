@@ -3,6 +3,68 @@ from numba import njit
 import numpy as np
 import time
 
+# @njit(parallel=False)
+# def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, t_window: int, size: int) -> np.array:
+#     '''
+#     Purpose: This is a generator that generates all subsets of size t_window
+#     Parameters: 
+#         Items -> Items that belong to user
+#         Timestamps -> when an item was rated
+#         t_window -> The acceptable width of a window
+#         size -> The number of elements in the array
+#     Return: Iteratively each subset of items t_window apart
+#     '''
+#     # This specifies the initial left and right index of window
+#     l = 0
+#     r = 1
+
+#     # This generates all subsets where l = 0
+#     while r < (size) and (timestamps[l] + t_window) > timestamps[r]:
+#         r += 1
+
+#         # get number of items in array
+#         count = r - l
+
+#         # skip windows of size 1
+#         if count == 1: continue
+ 
+#         # initialize array of size count
+#         window = np.empty(count, dtype='U5')
+
+#         # add items to array
+#         for i in range(count):
+#             index = i + l # calculate index
+#             window[i] = items[index] # add item at index to array
+
+#         yield window
+
+#     # This specifies the initial right index of window
+#     r = 0
+
+#     # This generates all subsets where l > 0
+#     for l in range(1, size - 1):
+
+#         # find max r index for window
+#         while r < (size) and timestamps[r] < (timestamps[l] + t_window):
+#             r += 1
+
+#         # get number of items in array
+#         count = r - l
+
+#         # skip windows of size 1
+#         if count == 1: continue
+ 
+#         # initialize array of size count
+#         window = np.empty(count, dtype='U5')
+
+#         # add items to array
+#         for i in range(count):
+#             index = i + l # calculate index
+#             window[i] = items[index] # add item at index to array
+
+#         yield window
+        
+
 @njit(parallel=False)
 def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, t_window: int, size: int) -> np.array:
     '''
@@ -14,56 +76,36 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, t
         size -> The number of elements in the array
     Return: Iteratively each subset of items t_window apart
     '''
-    # This specifies the initial left and right index of window
-    l = 0
-    r = 1
-
-    # This generates all subsets where l = 0
-    while r < (size) and (timestamps[l] + t_window) > timestamps[r]:
-        r += 1
-
-        # get number of items in array
-        count = r - l
-
-        # skip windows of size 1
-        if count == 1: continue
- 
-        # initialize array of size count
-        window = np.empty(count, dtype='U5')
-
-        # add items to array
-        for i in range(count):
-            index = i + l # calculate index
-            window[i] = items[index] # add item at index to array
-
-        yield window
-
     # This specifies the initial right index of window
-    r = 0
+    r: int = 0
+    new_window: bool = False
 
     # This generates all subsets where l > 0
-    for l in range(1, size - 1):
+    for l in range(0, size - 1):
 
         # find max r index for window
         while r < (size) and timestamps[r] < (timestamps[l] + t_window):
             r += 1
+            new_window: bool = True
 
         # get number of items in array
-        count = r - l
+        count: int = r - l
 
         # skip windows of size 1
         if count == 1: continue
  
         # initialize array of size count
-        window = np.empty(count, dtype='U5')
+        window: np.array = np.empty(count, dtype='U5')
 
-        # add items to array
-        for i in range(count):
-            index = i + l # calculate index
-            window[i] = items[index] # add item at index to array
+        if new_window:
+            # add items to array
+            for i in range(count):
+                index = i + l # calculate index
+                window[i] = items[index] # add item at index to array
 
-        yield window
-        
+            new_window:bool = False
+
+            yield window
 
 
 def initialize_structures(train: np.array, unique_users: np.array, t_window: int) -> pd.DataFrame:
@@ -86,10 +128,11 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
 
         # get list of items and timestamps for user
         user_data = train[train['user_id']==user]
-
+        # print(user_data)
         items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype='U5')
         timestamps:np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int32)
-
+        # print(*list(get_subsets(items, timestamps, t_window, len(user_data))), sep='\n')
+        # input()
         # record all subsets for user
         for subset in get_subsets(items, timestamps, t_window, len(user_data)):
             
