@@ -120,10 +120,10 @@ def recommender_algorithm(df: pd.DataFrame, user: str, k: int) -> dict:
     if k <= 0: raise Exception("Cannot recommend when k <= 0")
     
     # Get items that belong to user
-    user_items = set(df[ df['user_id'] == user ]['item_id'])
+    # user_items = set(df[ df['user_id'] == user ]['item_id'])
     
-    # max_context = df[ df['user_id'] == user ]['context'].max()
-    # user_items = set(df[ df['context'] == max_context ]['item_id'])
+    max_context = df[ df['user_id'] == user ]['context'].max()
+    user_items = set(df[ df['context'] == max_context ]['item_id'])
 
     # get users that share items
     related_context_table = df[ df['item_id'].isin(user_items) & df['user_id'] != user ]
