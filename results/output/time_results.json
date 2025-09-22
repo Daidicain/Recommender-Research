@@ -19,7 +19,7 @@
     },
     "amazon": {
         "adamic_adar": 3.505080223083496,
-        "common_neighbours": 3.420297384262085,
+	"common_neighbours": 3.420297384262085,
         "jaccard_coefficient": 3.9589056968688965,
         "preferential_attachment": 4.474560260772705,
         "temporal": 4.733642816543579,

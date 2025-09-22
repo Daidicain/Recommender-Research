@@ -13,20 +13,34 @@
         tools.py                            - Contains functions used commonly
 
     results/                                - Contains collected results from test
-        csv/
-            test/
-            validation/
-        output/
-            test/
+        csv/                                - raw output from main
+            test/                           - raw output from main in test mode
+            validation/                     - raw output from main in validation mode
+        output/                             - cleaned and reformated data 
+            test/                           - 
             validation/
             time_results.json
         graph data.py                       - takes results from csv/test/ then saves graphs in output/test/
         initialize.py                       - ensures results file structure are ready
         validation.py                       - combines results from validation tests
 
-## To install dependencies
+## Python venv (Recommended)
 
-    pip install --upgrade -r requirements.txt
+setup venv
+
+    python -m venv .venv
+
+To activate venv Windows
+
+    .venv\Scripts\activate
+
+To activate venv Mac/Linux
+
+    source .venv/bin/activate
+
+## Install dependencies
+
+    python -m pip install --upgrade -r requirements.txt
     
 
 ## To initialize results file structure
@@ -36,7 +50,7 @@
 
 ## To run
 
-Open either research.py or research_multicore.py and uncomment only one item from the '''DATASETS''' and '''ALGORITHMS''' respectively. This will run the code for the uncommented dataset and algorithm chosen
+Open either research.py or research_multicore.py and uncomment one item from the '''DATASETS''' and '''ALGORITHMS''' respectively. This will run the code for the uncommented dataset and algorithm chosen
 
     python Implementations/research.py
 
