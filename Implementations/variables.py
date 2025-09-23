@@ -9,8 +9,8 @@ B_VALUES = ["subset"]
 A_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000]
 
 '''DATASETS'''
-# DATASET = 'movielens'
-DATASET = 'netflix'
+DATASET = 'movielens'
+# DATASET = 'netflix'
 # DATASET = 'amazon'
 # DATASET = 'lastfm'
 

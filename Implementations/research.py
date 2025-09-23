@@ -102,7 +102,7 @@ if __name__=="__main__":
         if SAVE_NAME == 'time_score': recommendations = time_score.recommender_algorithm(train, user, unique_items, mostRecentYear, 0.5, 100)
         if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentYear, 0.5, 100)
         if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
-        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, user, 100)
+        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, train, user, 100)
     
 
         predict = set(test[test['user_id'] == user]['item_id'].unique())
