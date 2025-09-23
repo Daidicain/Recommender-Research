@@ -7,8 +7,8 @@ COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
 # the different tests that were run
 TESTS = ['precision@k','recall@k','maPrecision']
 
-DATASET = 'movielens'
-# DATASET = 'netflix'
+# DATASET = 'movielens'
+DATASET = 'netflix'
 # DATASET = 'amazon'
 
 # directory of the csv's

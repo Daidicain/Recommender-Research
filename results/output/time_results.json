@@ -6,7 +6,8 @@
         "preferential_attachment": 0,
         "temporal": 0,
         "time_score": 1643.4222557544708,
-        "link_score": 1687.001445531845
+        "link_score": 1687.001445531845,
+        "window": 37.92255425453186
     },
     "movielens": {
         "adamic_adar": 21.132760286331177,
@@ -15,11 +16,12 @@
         "preferential_attachment": 0,
         "temporal": 0,
         "time_score": 830.6350202560425,
-        "link_score": 938.7078931331635
+        "link_score": 938.7078931331635,
+        "window": 287.51638007164
     },
     "amazon": {
         "adamic_adar": 3.505080223083496,
-	"common_neighbours": 3.420297384262085,
+        "common_neighbours": 3.420297384262085,
         "jaccard_coefficient": 3.9589056968688965,
         "preferential_attachment": 4.474560260772705,
         "temporal": 4.733642816543579,
