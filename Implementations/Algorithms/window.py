@@ -154,7 +154,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
 
 
 
-def recommender_algorithm(df: pd.DataFrame, user: str, k: int) -> dict:
+def recommender_algorithm(df: pd.DataFrame, train: pd.DataFrame, user: str, k: int) -> dict:
     '''
     Purpose: This function returns all similar users and how similar they are
     Parameters: A bipartite graph, the user to compare and all other users
@@ -163,7 +163,7 @@ def recommender_algorithm(df: pd.DataFrame, user: str, k: int) -> dict:
     if k <= 0: raise Exception("Cannot recommend when k <= 0")
     
     # Get items that belong to user
-    user_items = set(df[ df['user_id'] == user ]['item_id'])
+    user_items = set(train[ train['user_id'] == user ]['item_id'])
     
     # max_context = df[ df['user_id'] == user ]['context'].max()
     # user_items = set(df[ df['context'] == max_context ]['item_id'])
