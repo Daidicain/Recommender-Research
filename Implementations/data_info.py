@@ -22,6 +22,25 @@ CONFIG = {
         'COLUMN_NAMES' : ["item_id","user_id","rating","ts"],
         'DELIMITER' : ",",
         'SKIPROWS' : 1
+    },
+    'epinions' : {
+        'DATAPATH' : "Datasets/epinions/epinions_sample.csv",
+        'COLUMN_NAMES' : ["item_id","user_id","rating", "status", "ts", "modified", "type", "vertical_id"],
+        'DELIMITER' : ",",
+        'SKIPROWS' : 1
+    }
+    ,
+    'steam' : {
+        'DATAPATH' : "Datasets/steam/epinions_sample.csv",
+        'COLUMN_NAMES' : ["user_id", "item_id", "behaviour", "hoursplayed", "ts", "modified", "type", "vertical_id"],
+        'DELIMITER' : ",",
+        'SKIPROWS' : 0
+    },    
+    'myket' : {
+        'DATAPATH' : "Datasets/myket/myket_sample.csv",
+        'COLUMN_NAMES' : ["ts","user_id" ,"item_id" ,"rating"],
+        'DELIMITER' : ",",
+        'SKIPROWS' : 1
     }
 
 
