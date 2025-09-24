@@ -29,6 +29,14 @@ if SAVE_NAME == 'link_score': import Algorithms.link_score as link_score
 if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
 if SAVE_NAME == 'window': import Algorithms.window as window
 
+def progress_bar(progress, total, position):
+    LINE_UP = '\033[1A' * position
+    LINE_DOWN = '\x1b[1B' * position
+    LINE_CLEAR = '\x1b[2K'
+    percent = 100 * (progress / float(total))
+    bar = '█' * int(percent) + '-' * (100 - int(percent))
+    print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |{bar}| {percent:.2f}%{LINE_DOWN}", end='\r')
+
 
 def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, df):
     '''
@@ -47,10 +55,11 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, d
 
     total = len(users) - 1
 
-    
+    p = mp.current_process()._identity[0]
 
     for index, user in enumerate(users):
-        print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
+        # print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
+        progress_bar(index+1, len(users), p)
 
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
@@ -138,6 +147,11 @@ def main(A, B):
     arguments = []
     for i in range(CPU_CORES): arguments.append([])
     for i in range(len(users)): arguments[i%CPU_CORES].append(users[i])
+
+    # Initializes the Progress Bars
+    print(f'\n{" "*13}{"-"*46} Progress {"-"*46}') # title
+    for i in range(CPU_CORES):
+        print( f"Process: {i:>3} |{'-' * 100}| 0%") # progress bar
 
     t1 = time.time()
     with mp.Pool(CPU_CORES) as pool:

@@ -9,7 +9,7 @@ COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
 TESTS = ['precision@k','recall@k','maPrecision']
 
 # colours available
-COLOURS = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),(1,0,0),(1,0,1),(1,1,0),(1,1,1)]
+COLOURS = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),(1,0,0),(1,0,1),(1,1,0),(0.5,0.5,1)]
 
 # directory of the csv's
 directory_list = os.listdir('results/csv/test/') 
@@ -22,8 +22,8 @@ for dataset in directory_list:
 
         # directory of dataset
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
-        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv', 'window.csv', 'window1.csv', 'window2.csv', 'window3.csv']
-        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'time_score.csv', 'window.csv', 'window2.csv', 'windowsmall.csv', 'windowbig.csv']
+        algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv', 'window.csv']
+        # algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'time_score.csv', 'window.csv', 'window2.csv', 'windowsmall.csv', 'windowbig.csv']
         print(algorithms_list)
         input()
 
