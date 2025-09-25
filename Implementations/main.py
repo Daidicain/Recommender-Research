@@ -4,6 +4,7 @@ import tools
 import os
 import json
 import numpy as np
+import math
 
 import multiprocessing as mp
 from functools import partial
@@ -43,6 +44,21 @@ def progress_bar(progress, total, position):
     #     print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |\033[31m{bar}\033[0m| {percent:.2f}%{LINE_DOWN}", end='\r')
     # else:
     #     print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |\033[32m{bar}\033[0m| {percent:.2f}%{LINE_DOWN}", end='\r')
+
+def percentages(progress, total, position):
+    h_position = position % 10
+    v_position = math.floor(position / 10) + 1
+    BLOCK_SIZE = 10
+    # ANSI Escape Codes
+    LINE_UP = f'\033[{position}A'
+    LINE_DOWN = f'\x1b[{position}B'
+    LINE_RIGHT = f'\033[{h_position*BLOCK_SIZE}C'
+    LINE_LEFT = f'\033[{v_position*BLOCK_SIZE}D'
+    LINE_CLEAR = '\x1b[2K'
+    percent = 100 * (progress / float(total))
+    # bar = '█' * int(percent) + '-' * (100 - int(percent))
+    bar = '#' * int(percent) + '-' * (100 - int(percent))
+    print(f"{LINE_UP}{LINE_RIGHT}Process: {CPU_CORES-position:>3} |\033[31m{percent}%\033[0m| {percent:.2f}%{LINE_LEFT}{LINE_DOWN}", end='\r')
 
 
 def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, df):
@@ -156,9 +172,16 @@ def main(A, B):
     for i in range(len(users)): arguments[i%CPU_CORES].append(users[i])
 
     # Initializes the Progress Bars
-    print(f'\n{" "*13}{"-"*46} Progress {"-"*46}') # title
+    print(f'\n{"-"*55} Progress {"-"*55}') # title
+    print(f' Process    '*(10)) # title
+
+    statement = ""
     for i in range(CPU_CORES):
-        print( f"Process: {i:>3} |{'-' * 100}| 0%") # progress bar
+        if i % 10 == 0: statement += "\n"
+        statement += f'{i:^3}\033[31m  0%\033[0m  |  '
+    print( statement ) # progress bar
+
+    input()
 
     t1 = time.time()
     with mp.Pool(CPU_CORES) as pool:

@@ -17,9 +17,9 @@ DATASET = 'myket'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
-# SAVE_NAME = 'common_neighbours'
+SAVE_NAME = 'common_neighbours'
 # SAVE_NAME = 'jaccard_coefficient'
-SAVE_NAME = 'window'
+# SAVE_NAME = 'window'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -30,6 +30,6 @@ A = 1000
 B = 1000
 
 '''SYSTEM'''
-CPU_CORES = 8 # number of cores to use
+CPU_CORES = 12 # number of cores to use
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
