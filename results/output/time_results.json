@@ -12,7 +12,7 @@
     "movielens": {
         "adamic_adar": 21.132760286331177,
         "common_neighbours": 11.368555784225464,
-        "jaccard_coefficient": 15.164021968841553,
+        "jaccard_coefficient": 12.649682760238647,
         "preferential_attachment": 0,
         "temporal": 0,
         "time_score": 830.6350202560425,
@@ -32,8 +32,8 @@
         "jaccard_coefficient": 105.65823483467102
     },
     "myket": {
-        "jaccard_coefficient": 14.268070936203003,
-        "window": 257.92228269577026,
+        "jaccard_coefficient": 10.509464263916016,
+        "window": 31.700013875961304,
         "common_neighbours": 13.853564977645874,
         "adamic_adar": 18.760717391967773
     }
