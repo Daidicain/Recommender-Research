@@ -30,12 +30,19 @@ if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
 if SAVE_NAME == 'window': import Algorithms.window as window
 
 def progress_bar(progress, total, position):
-    LINE_UP = '\033[1A' * position
-    LINE_DOWN = '\x1b[1B' * position
+    # ANSI Escape Codes
+    LINE_UP = f'\033[{position}A'
+    LINE_DOWN = f'\x1b[{position}B'
     LINE_CLEAR = '\x1b[2K'
     percent = 100 * (progress / float(total))
-    bar = '█' * int(percent) + '-' * (100 - int(percent))
-    print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |{bar}| {percent:.2f}%{LINE_DOWN}", end='\r')
+    # bar = '█' * int(percent) + '-' * (100 - int(percent))
+    bar = '#' * int(percent) + '-' * (100 - int(percent))
+    print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |\033[31m{bar}\033[0m| {percent:.2f}%{LINE_DOWN}", end='\r')
+
+    # if position % 2 == 0:
+    #     print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |\033[31m{bar}\033[0m| {percent:.2f}%{LINE_DOWN}", end='\r')
+    # else:
+    #     print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |\033[32m{bar}\033[0m| {percent:.2f}%{LINE_DOWN}", end='\r')
 
 
 def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, df):

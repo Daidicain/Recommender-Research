@@ -1,6 +1,6 @@
 '''VALIDATION TESTS'''
-VALIDATION_TESTS = True
-# VALIDATION_TESTS = False
+# VALIDATION_TESTS = True
+VALIDATION_TESTS = False
 
 # B_VALUES = [10,100,1000,10000,100000]
 # B_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
@@ -12,6 +12,7 @@ A_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000]
 # DATASET = 'movielens'
 # DATASET = 'netflix'
 # DATASET = 'amazon'
+# DATASET = 'epinions'
 DATASET = 'myket'
 
 '''ALGORITHMS'''
@@ -29,6 +30,6 @@ A = 1000
 B = 1000
 
 '''SYSTEM'''
-CPU_CORES = 12 # number of cores to use
+CPU_CORES = 8 # number of cores to use
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
