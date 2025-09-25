@@ -13,6 +13,7 @@ A_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000]
 DATASET = 'movielens'
 # DATASET = 'netflix'
 # DATASET = 'amazon'
+# DATASET = 'epinions'
 # DATASET = 'myket'
 
 '''ALGORITHMS'''
@@ -30,6 +31,10 @@ A = 1000
 B = 100000000
 
 '''SYSTEM'''
+<<<<<<< HEAD
 CPU_CORES = 40 # number of cores to use
+=======
+CPU_CORES = 8 # number of cores to use
+>>>>>>> bc9ef842851b64487faa58de4d763d525d1c0468
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
