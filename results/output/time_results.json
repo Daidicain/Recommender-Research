@@ -36,7 +36,7 @@
     "myket": {
         "jaccard_coefficient": 14.268070936203003,
         "window": 257.92228269577026,
-        "common_neighbours": 13.853564977645874,
+        "common_neighbours": 14.242207050323486,
         "adamic_adar": 18.760717391967773
     }
 }

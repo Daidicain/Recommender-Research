@@ -47,19 +47,27 @@ def progress_bar(progress, total, position):
 
 def percentages(progress, total, position):
     h_position = position % 10
-    v_position = math.floor(position / 10) + 1
-    BLOCK_SIZE = 10
+    v_position = math.ceil(CPU_CORES/10) - math.floor(position / 10)
+    # print(position, h_position, v_position)
+    BLOCK_SIZE = 22
     # ANSI Escape Codes
-    LINE_UP = f'\033[{position}A'
-    LINE_DOWN = f'\x1b[{position}B'
-    LINE_RIGHT = f'\033[{h_position*BLOCK_SIZE}C'
-    LINE_LEFT = f'\033[{v_position*BLOCK_SIZE}D'
+    LINE_UP = f'\033[{v_position}A'
+    LINE_DOWN = f'\x1b[{v_position}B'
+    
+    if h_position == 0: 
+        LINE_RIGHT = ""
+        LINE_LEFT = f'\033[{h_position*BLOCK_SIZE}D'
+    else:
+        LINE_RIGHT = f'\033[{h_position*BLOCK_SIZE}C'
+        LINE_LEFT = f'\033[{h_position*BLOCK_SIZE}D'
     LINE_CLEAR = '\x1b[2K'
+    # print(position, v_position , h_position*BLOCK_SIZE)
     percent = 100 * (progress / float(total))
     # bar = '█' * int(percent) + '-' * (100 - int(percent))
-    bar = '#' * int(percent) + '-' * (100 - int(percent))
-    print(f"{LINE_UP}{LINE_RIGHT}Process: {CPU_CORES-position:>3} |\033[31m{percent}%\033[0m| {percent:.2f}%{LINE_LEFT}{LINE_DOWN}", end='\r')
-
+    bar = '#' * int(percent/10) + ' ' * (10 - int(percent/10))
+    print(f"{LINE_UP}{LINE_RIGHT}{position:>3}|\033[31m{bar}\033[0m|{percent:>5.1f}%{LINE_LEFT}{LINE_DOWN}", end='\r')
+    # '{i:^3}\033[31m  0%\033[0m  |  '
+    # '{i:>2}          \033[31m  0.0%\033[0m  '
 
 def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, df):
     '''
@@ -78,11 +86,12 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, d
 
     total = len(users) - 1
 
-    p = mp.current_process()._identity[0]
+    p = mp.current_process()._identity[0] -1
+    # print(p)
 
     for index, user in enumerate(users):
         # print(f'Process ID {os.getpid():>5}:{index:>3}/{total:<3} user:{user}')
-        progress_bar(index+1, len(users), p)
+        percentages(index, len(users), p)
 
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
@@ -116,6 +125,8 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, d
             df_accuracy["precision@k"].append(precisionAtK)
             df_accuracy['recall@k'].append(recallAtK)
             df_accuracy['maPrecision'].append(meanAPrecision)
+    
+    percentages(1, 1, p)
         
     return df_accuracy
 
@@ -172,16 +183,15 @@ def main(A, B):
     for i in range(len(users)): arguments[i%CPU_CORES].append(users[i])
 
     # Initializes the Progress Bars
-    print(f'\n{"-"*55} Progress {"-"*55}') # title
-    print(f' Process    '*(10)) # title
+    print(f'\n{"-"*101} Process Progress {"-"*101}') # title
+    # print(f' Process    '*(10)) # title
 
-    statement = ""
+    statement = f''
     for i in range(CPU_CORES):
         if i % 10 == 0: statement += "\n"
-        statement += f'{i:^3}\033[31m  0%\033[0m  |  '
+        statement += f'{i:>3}|\033[31m          \033[0m|  0.0% '
     print( statement ) # progress bar
 
-    input()
 
     t1 = time.time()
     with mp.Pool(CPU_CORES) as pool:
@@ -192,6 +202,8 @@ def main(A, B):
             df_accuracy['precision@k'].extend(result['precision@k'])
             df_accuracy['recall@k'].extend(result['recall@k'])
             df_accuracy['maPrecision'].extend(result['maPrecision'])
+
+    print(f'time elapsed:{time.time()-t1:2.2f}s')
 
     # Record time to run
     if not VALIDATION_TESTS:
