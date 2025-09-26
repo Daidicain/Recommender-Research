@@ -12,7 +12,7 @@
     "movielens": {
         "adamic_adar": 21.132760286331177,
         "common_neighbours": 11.368555784225464,
-        "jaccard_coefficient": 12.649682760238647,
+        "jaccard_coefficient": 15.233591079711914,
         "preferential_attachment": 0,
         "temporal": 0,
         "time_score": 830.6350202560425,

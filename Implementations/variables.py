@@ -31,10 +31,6 @@ A = 1000
 B = 100000000
 
 '''SYSTEM'''
-<<<<<<< HEAD
-CPU_CORES = 40 # number of cores to use
-=======
-CPU_CORES = 8 # number of cores to use
->>>>>>> bc9ef842851b64487faa58de4d763d525d1c0468
+CPU_CORES = 80 # number of cores to use
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
