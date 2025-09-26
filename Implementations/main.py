@@ -46,8 +46,8 @@ def progress_bar(progress, total, position):
     #     print(f"{LINE_UP}{LINE_CLEAR}Process: {CPU_CORES-position:>3} |\033[32m{bar}\033[0m| {percent:.2f}%{LINE_DOWN}", end='\r')
 
 def percentages(progress, total, position):
-    h_position = position % 10
-    v_position = math.ceil(CPU_CORES/10) - math.floor(position / 10)
+    h_position = position % 8
+    v_position = math.ceil(CPU_CORES/8) - math.floor(position / 8)
     # print(position, h_position, v_position)
     BLOCK_SIZE = 22
     # ANSI Escape Codes
@@ -188,7 +188,7 @@ def main(A, B):
 
     statement = f''
     for i in range(CPU_CORES):
-        if i % 10 == 0: statement += "\n"
+        if i % 8 == 0: statement += "\n"
         statement += f'{i:>3}|\033[31m          \033[0m|  0.0% '
     print( statement ) # progress bar
 
