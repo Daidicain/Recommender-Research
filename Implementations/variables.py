@@ -18,8 +18,8 @@ DATASET = 'movielens'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
-# SAVE_NAME = 'common_neighbours'
-SAVE_NAME = 'jaccard_coefficient'
+SAVE_NAME = 'common_neighbours'
+# SAVE_NAME = 'jaccard_coefficient'
 # SAVE_NAME = 'window'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
@@ -31,6 +31,10 @@ A = 1000
 B = 100000000
 
 '''SYSTEM'''
+<<<<<<< HEAD
 CPU_CORES = 80 # number of cores to use
+=======
+CPU_CORES = 12 # number of cores to use
+>>>>>>> 0aa5373665b6be29ab0bb8df05eadd987d3e3d0e
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
