@@ -12,8 +12,8 @@ DATASET = 'amazon'
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
-# SAVE_NAME = 'jaccard_coefficient'
-SAVE_NAME = 'window'
+SAVE_NAME = 'jaccard_coefficient'
+# SAVE_NAME = 'window'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -75,7 +75,7 @@ if __name__=="__main__":
     if SAVE_NAME == 'time_score': G, mostRecentYear = time_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'link_score': G, mostRecentYear = link_score.initialize_structures(train, unique_users, unique_items)
     if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B1)
-    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, 40 )
+    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, 1000000000 )
 
     # This will store testing information
     df_accuracy = {}

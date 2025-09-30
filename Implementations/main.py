@@ -183,7 +183,7 @@ def main(A, B):
     for i in range(len(users)): arguments[i%CPU_CORES].append(users[i])
 
     # Initializes the Progress Bars
-    print(f'\n{"-"*101} Process Progress {"-"*101}') # title
+    print(f'\n{"-"*79} Process Progress {"-"*79}') # title
     # print(f' Process    '*(10)) # title
 
     statement = f''

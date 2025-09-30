@@ -95,7 +95,7 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, t
         if count == 1: continue
  
         # initialize array of size count
-        window: np.array = np.empty(count, dtype='U5')
+        window: np.array = np.empty(count, dtype='U10')
 
         if new_window:
             # add items to array
@@ -129,8 +129,9 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
         # get list of items and timestamps for user
         user_data = train[train['user_id']==user]
         # print(user_data)
-        items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype='U5')
+        items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype='U10')
         timestamps:np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int32)
+        # print(user)
         # print(*list(get_subsets(items, timestamps, t_window, len(user_data))), sep='\n')
         # input()
         # record all subsets for user
