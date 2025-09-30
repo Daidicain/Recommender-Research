@@ -24,8 +24,8 @@ for dataset in directory_list:
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
         algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv', 'window.csv']
         # algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'time_score.csv', 'window.csv', 'window2.csv', 'windowsmall.csv', 'windowbig.csv']
-        print(algorithms_list)
-        input()
+        # print(algorithms_list)
+        # input()
 
         # Loop through each test type
         for test in TESTS:
