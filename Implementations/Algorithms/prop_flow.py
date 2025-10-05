@@ -2,6 +2,8 @@ import networkx as nx
 import math
 import tools
 
+GRAPH = True
+
 def prop_flow(G: nx.graph, user: str, k: int) -> dict:
     '''
     Purpose: This function returns all similar users and how similar they are

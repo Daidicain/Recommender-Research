@@ -4,8 +4,9 @@ import tools
 import numpy as np
 import pandas as pd
 
+GRAPH = True
 
-def initialize_structures(train, unique_users: np.array, unique_items: np.array):
+def initialize_structures(train, unique_users: np.array, unique_items: np.array, **kwargs):
     '''
     Purpose: This initializes the graph with users
     Parameters: The dataset and two np.arrays unique_users and unique_items.
@@ -70,7 +71,7 @@ def link_score_helper(ratings, time_stamps, current_time, length, B):
 
     return np.sum(all_links) / (3)
 
-def recommender_algorithm(G: nx.graph, train: pd.DataFrame, user: str, unique_items, current_time: int, B: int, k: int) -> dict:
+def recommender_algorithm(G: nx.graph, train: pd.DataFrame, user: str, unique_items, current_time: int, B: int, k: int, **kwargs) -> dict:
     '''
     Purpose: This function returns users in order of preferential attachment |Γ1(u)| * |Γ1(p)| 
     Parameters: A bipartite graph, the user to compare and all other users, L max length of path, B a damping factor (0< B <1)

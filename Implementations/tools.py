@@ -31,7 +31,7 @@ def user_split(df, unique_users, random_state):
   
         yield train, test, validation
 
-def readData(path: str, column_names: list, random_state: int, delimiter: str, skiprows: int):
+def readData(path: str, column_names: list, random_state: int, delimiter: str, skiprows: int, GRAPH:bool):
     '''
     Purpose: reads data from csv file and returns the data
     Parameters: the path to the file, columns in the file
@@ -41,21 +41,26 @@ def readData(path: str, column_names: list, random_state: int, delimiter: str, s
     df = pd.read_csv(path, delimiter=delimiter, encoding="utf-8", names=column_names, skiprows=skiprows)
 
     # item nodes need unique ids. add u/i to users/items
-    df['user_id'] = 'u' + df['user_id'].astype(str)
-    df['item_id'] = 'i' + df['item_id'].astype(str)
+    if GRAPH:
+        df['user_id'] = 'u' + df['user_id'].astype(str)
+        df['item_id'] = 'i' + df['item_id'].astype(str)
+    else:
+        df['user_id'] = df['user_id'].astype(int)
+        df['item_id'] = df['item_id'].astype(int)
     df['rating'] = df['rating'].astype(float)
     df['ts'] = df['ts'].astype(int)
+
+    # sort table by timestamps
+    df = df.sort_values(by='ts')
 
     # all unique users and items for train set
     unique_users = df['user_id'].unique()
     unique_items = df['item_id'].unique()
 
-    print("total rows: ", len(df))
-
-    df = df.sort_values(by='ts')
-
+    # split date by user
     users_split = list(user_split(df, unique_users, random_state)) # list of tuples [(train,test,validation), ...]
     
+    # combine data
     train = pd.concat([list_of_tuples[0] for list_of_tuples in users_split]) # combines all training sets
     test = pd.concat([list_of_tuples[1] for list_of_tuples in users_split]) # combines all test sets
     validation = pd.concat([list_of_tuples[2] for list_of_tuples in users_split]) # combines all validation sets
