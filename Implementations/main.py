@@ -26,6 +26,8 @@ if SAVE_NAME == 'preferential_attachment': from Algorithms.preferential_attachme
 if SAVE_NAME == 'time_score': from Algorithms.time_score import *
 if SAVE_NAME == 'link_score': from Algorithms.link_score import *
 if SAVE_NAME == 'temporal': from Algorithms.temporal import *
+if SAVE_NAME == 'window_rating': from Algorithms.window_rating import *
+if SAVE_NAME == 'window_subgraph': from Algorithms.window_subgraph import *
 if SAVE_NAME == 'window': from Algorithms.window import *
 
 
@@ -203,7 +205,7 @@ def main(A, B):
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
 
     # print the results
-    # print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
+    print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
         df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={A:.2f}_B={B:.2f}.csv')
@@ -216,7 +218,7 @@ def main(A, B):
 if __name__=="__main__":
     if VALIDATION_TESTS:
         for B_validation in B_VALUES:
-            for A_validation in A_VALUES:
+            for A_validation in T_VALUES:
                 main(A_validation,B_validation)
     else:
         main(A,B)

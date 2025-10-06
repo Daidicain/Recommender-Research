@@ -13,11 +13,11 @@ DATASET = 'movielens'
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
 # SAVE_NAME = 'jaccard_coefficient'
-# SAVE_NAME = 'window'
+SAVE_NAME = 'window'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
-SAVE_NAME = 'time_score'
+# SAVE_NAME = 'time_score'
 # SAVE_NAME = 'ts'
 
 '''Variables'''
@@ -54,7 +54,8 @@ if SAVE_NAME == 'preferential_attachment': from Algorithms.preferential_attachme
 if SAVE_NAME == 'time_score': from Algorithms.time_score import *
 if SAVE_NAME == 'link_score': from Algorithms.link_score import *
 if SAVE_NAME == 'temporal': from Algorithms.temporal import *
-if SAVE_NAME == 'window': from Algorithms.window import *
+if SAVE_NAME == 'window': from Algorithms.window_rating import *
+# if SAVE_NAME == 'window': from Algorithms.window import *
 
 
 if __name__=="__main__":
@@ -65,7 +66,7 @@ if __name__=="__main__":
     print('users: ',len(unique_users),'items: ', len(unique_items))    
 
     # initialize stuctures
-    G, mostRecentYear, context_df = initialize_structures(train=train, unique_users=unique_users, unique_items=unique_items, t_window=1000000000)
+    G, current_time, context_df = initialize_structures(train=train, unique_users=unique_users, unique_items=unique_items, t_window=1000000000)
     
     # This will store testing information
     df_accuracy = {}
@@ -86,8 +87,12 @@ if __name__=="__main__":
 
         # get recommendations
         
-        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, mostRecentDay=mostRecentDay, unique_items=unique_items, k=100)  
+        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, k=100)  
         predict = set(test[test['user_id'] == user]['item_id'].unique())
+
+        print(recommendations)
+        print(predict)
+        input()
         
         # get test results
         precisionAtK = tools.precisionAtK(set(recommendations),predict)
