@@ -126,7 +126,7 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
     return df_accuracy
 
 
-def main(A, B):
+def main(T, B):
     '''
     Purpose: intializes data then splits users into groups for each processor
     Parameters: 
@@ -208,20 +208,21 @@ def main(A, B):
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
-        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={B}_A={A}.csv')
-    
+        df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={B}_A={T:.2f}.csv')    
     else:
         df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
+
+    print('\x1b[2K', end='\n')
 
 
 
 if __name__=="__main__":
     if VALIDATION_TESTS:
         for B_validation in B_VALUES:
-            for A_validation in T_VALUES:
-                main(A_validation,B_validation)
+            for T_validation in T_VALUES:
+                main(T_validation,B_validation)
     else:
-        main(A,B)
+        main(T,B)
     
 
 
