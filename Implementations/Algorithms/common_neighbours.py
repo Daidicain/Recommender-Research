@@ -3,7 +3,9 @@ import pandas as pd
 import tools
 import numpy as np
 
-def initialize_structures(train, unique_users: np.array, unique_items: np.array):
+GRAPH = True
+
+def initialize_structures(train, unique_users: np.array, unique_items: np.array, **kwargs):
     '''
     Purpose: This initializes the graph with users
     Parameters: The dataset and two np.arrays unique_users and unique_items.
@@ -27,7 +29,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
 
     print('edges added')
 
-    return G
+    return G, None, None
 
 # def common_neighbours(train: pd.DataFrame, user: str, user_items: pd.DataFrame, k: int) -> dict:
 #     '''
@@ -81,7 +83,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
 
 
 # def common_neighbours_networkx(G: nx.graph, user: str, k: int) -> dict:
-def recommender_algorithm(G: nx.graph, user: str, k: int) -> dict:
+def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
     '''
     Purpose: This function returns all similar users and how similar they are based on (neighbour ∩ user)
     Parameters: A bipartite graph, the user to compare and all other users

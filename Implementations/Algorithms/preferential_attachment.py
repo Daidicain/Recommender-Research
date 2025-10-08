@@ -2,7 +2,9 @@ import networkx as nx
 import numpy as np
 import tools
 
-def initialize_structures(train, unique_users: np.array, unique_items: np.array):
+GRAPH = True
+
+def initialize_structures(train, unique_users: np.array, unique_items: np.array, **kwargs):
     '''
     Purpose: This initializes the graph with users
     Parameters: The dataset and two np.arrays unique_users and unique_items.
@@ -26,9 +28,9 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array)
 
     print('edges added')
 
-    return G
+    return G, None, None
 
-def recommender_algorithm(G: nx.graph, user: str, k) -> dict:
+def recommender_algorithm(G: nx.graph, user: str, k:int, **kwargs) -> dict:
     '''
     Purpose: This function returns users in order of preferential attachment |Γ1(u)| * |Γ1(p)| 
     Parameters: A bipartite graph, the user to compare and all other users

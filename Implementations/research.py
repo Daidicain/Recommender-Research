@@ -4,16 +4,16 @@ print("hello world")
 
 
 '''DATASETS'''
-# DATASET = 'movielens'
-DATASET = 'amazon'
+DATASET = 'movielens'
+# DATASET = 'amazon'
 # DATASET = 'netflix'
 # DATASET = 'lastfm'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
-SAVE_NAME = 'jaccard_coefficient'
-# SAVE_NAME = 'window'
+# SAVE_NAME = 'jaccard_coefficient'
+SAVE_NAME = 'window'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -46,37 +46,27 @@ SKIPROWS = CONFIG[DATASET]['SKIPROWS']
 
 
 
-if SAVE_NAME == 'adamic_adar': import Algorithms.adamic_adar as adamic_adar
-if SAVE_NAME == 'common_neighbours': import Algorithms.common_neighbours as common_neighbours
-if SAVE_NAME == 'jaccard_coefficient': import Algorithms.jaccard_coefficient as jaccard_coefficient
-if SAVE_NAME == 'preferential_attachment': import Algorithms.preferential_attachment as preferential_attachment
-if SAVE_NAME == 'time_score': import Algorithms.time_score as time_score
-if SAVE_NAME == 'link_score': import Algorithms.link_score as link_score
-if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
-if SAVE_NAME == 'window': import Algorithms.window as window
+if SAVE_NAME == 'adamic_adar': from Algorithms.adamic_adar import *
+if SAVE_NAME == 'common_neighbours': from Algorithms.common_neighbours import *
+if SAVE_NAME == 'jaccard_coefficient': from Algorithms.jaccard_coefficient import *
+if SAVE_NAME == 'preferential_attachment': from Algorithms.preferential_attachment import *
+if SAVE_NAME == 'time_score': from Algorithms.time_score import *
+if SAVE_NAME == 'link_score': from Algorithms.link_score import *
+if SAVE_NAME == 'temporal': from Algorithms.temporal import *
+if SAVE_NAME == 'window': from Algorithms.window_rating import *
+# if SAVE_NAME == 'window': from Algorithms.window import *
 
 
 if __name__=="__main__":
 
     # get initial data
-    unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
+    unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS, GRAPH)
 
-    print('users: ',len(unique_users),'items: ', len(unique_items))
+    print('users: ',len(unique_users),'items: ', len(unique_items))    
 
-    G=None
-    mostRecentYear = None
-    df = None
+    # initialize stuctures
+    G, current_time, context_df = initialize_structures(train=train, unique_users=unique_users, unique_items=unique_items, t_window=1000000000)
     
-    # initialize graph object
-    if SAVE_NAME == 'adamic_adar': G = adamic_adar.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'common_neighbours': G = common_neighbours.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'jaccard_coefficient': G = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'preferential_attachment': G = preferential_attachment.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'time_score': G, mostRecentYear = time_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'link_score': G, mostRecentYear = link_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B1)
-    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, 1000000000 )
-
     # This will store testing information
     df_accuracy = {}
     df_accuracy['user_id'] = []
@@ -94,17 +84,14 @@ if __name__=="__main__":
         # pass if user has no items
         if len( user_items ) == 0: continue
 
-        if SAVE_NAME == 'adamic_adar': recommendations = adamic_adar.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'common_neighbours': recommendations = common_neighbours.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'jaccard_coefficient': recommendations = jaccard_coefficient.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'preferential_attachment': recommendations = preferential_attachment.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'time_score': recommendations = time_score.recommender_algorithm(train, user, unique_items, mostRecentYear, 0.5, 100)
-        if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentYear, 0.5, 100)
-        if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
-        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, train, user, 100)
-    
-
+        # get recommendations
+        
+        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, k=100)  
         predict = set(test[test['user_id'] == user]['item_id'].unique())
+
+        print(recommendations)
+        print(predict)
+        input()
         
         # get test results
         precisionAtK = tools.precisionAtK(set(recommendations),predict)

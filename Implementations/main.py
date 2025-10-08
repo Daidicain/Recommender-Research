@@ -1,7 +1,6 @@
 import pandas as pd
 import time
 import tools
-import os
 import json
 import numpy as np
 import math
@@ -10,7 +9,6 @@ import multiprocessing as mp
 from functools import partial
 
 from variables import *
-
 
 '''load data info'''
 from data_info import *
@@ -21,14 +19,17 @@ DELIMITER = CONFIG[DATASET]['DELIMITER']
 SKIPROWS = CONFIG[DATASET]['SKIPROWS']
 
 '''import algorithm module'''
-if SAVE_NAME == 'adamic_adar': import Algorithms.adamic_adar as adamic_adar
-if SAVE_NAME == 'common_neighbours': import Algorithms.common_neighbours as common_neighbours
-if SAVE_NAME == 'jaccard_coefficient': import Algorithms.jaccard_coefficient as jaccard_coefficient
-if SAVE_NAME == 'preferential_attachment': import Algorithms.preferential_attachment as preferential_attachment
-if SAVE_NAME == 'time_score': import Algorithms.time_score as time_score
-if SAVE_NAME == 'link_score': import Algorithms.link_score as link_score
-if SAVE_NAME == 'temporal': import Algorithms.temporal as temporal
-if SAVE_NAME == 'window': import Algorithms.window as window
+if SAVE_NAME == 'adamic_adar': from Algorithms.adamic_adar import *
+if SAVE_NAME == 'common_neighbours': from Algorithms.common_neighbours import *
+if SAVE_NAME == 'jaccard_coefficient': from Algorithms.jaccard_coefficient import *
+if SAVE_NAME == 'preferential_attachment': from Algorithms.preferential_attachment import *
+if SAVE_NAME == 'time_score': from Algorithms.time_score import *
+if SAVE_NAME == 'link_score': from Algorithms.link_score import *
+if SAVE_NAME == 'temporal': from Algorithms.temporal import *
+if SAVE_NAME == 'window_rating': from Algorithms.window_rating import *
+if SAVE_NAME == 'window_subgraph': from Algorithms.window_subgraph import *
+if SAVE_NAME == 'window': from Algorithms.window import *
+
 
 def progress_bar(progress, total, position):
     # ANSI Escape Codes
@@ -69,7 +70,7 @@ def percentages(progress, total, position):
     # '{i:^3}\033[31m  0%\033[0m  |  '
     # '{i:>2}          \033[31m  0.0%\033[0m  '
 
-def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, df):
+def testUsers( users, G, train, test, validation, current_time, unique_items, context_df):
     '''
     Purpose: runs the tests for a given set of users returning results
     Parameters: 
@@ -99,14 +100,8 @@ def testUsers( users, G, train, test, validation, mostRecentDay, unique_items, d
         # pass if user has no items
         if len( user_items ) == 0: continue
 
-        if SAVE_NAME == 'adamic_adar': recommendations = adamic_adar.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'common_neighbours': recommendations = common_neighbours.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'jaccard_coefficient': recommendations = jaccard_coefficient.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'preferential_attachment': recommendations = preferential_attachment.recommender_algorithm(G, user, 100)
-        if SAVE_NAME == 'time_score': recommendations = time_score.recommender_algorithm(train, user, unique_items, mostRecentDay, 0.5, 100)
-        if SAVE_NAME == 'link_score': recommendations = link_score.recommender_algorithm(G, train, user, unique_items, mostRecentDay, 0.5, 100)
-        if SAVE_NAME == 'temporal': recommendations = temporal.recommender_algorithm(G, train, user, 100)
-        if SAVE_NAME == 'window': recommendations = window.recommender_algorithm(df, train, user, 100)
+        # get recommendations
+        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, B=B, k=100)   
         
 
         predict = set(validation[validation['user_id'] == user]['item_id'].unique())
@@ -138,27 +133,16 @@ def main(A, B):
     Results: 
     '''
     # get initial data
-    unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS)
+    unique_users, unique_items, test, train, validation = tools.readData(DATAPATH, COLUMN_NAMES, RANDOM_STATE, DELIMITER, SKIPROWS, GRAPH)
 
     # print('users: ',len(unique_users),'items: ', len(unique_items))
     print(f'A={A}, B={B}')
 
-    G = None
-    mostRecentDay = None
-    df =None
-
     # initialize graph object
-    if SAVE_NAME == 'adamic_adar': G = adamic_adar.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'common_neighbours': G = common_neighbours.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'jaccard_coefficient': G = jaccard_coefficient.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'preferential_attachment': G = preferential_attachment.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'time_score': G, mostRecentDay = time_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'link_score': mostRecentDay = link_score.initialize_structures(train, unique_users, unique_items)
-    if SAVE_NAME == 'temporal': G = temporal.initialize_structures(train, unique_users, unique_items, A, B)
-    if SAVE_NAME == 'window': df = window.initialize_structures(train, unique_users, A )
-
+    G, current_time, context_df = initialize_structures(train=train, unique_users=unique_users, unique_items=unique_items, t_window=T)
+    
     # add time weight edges between users and items
-    # mostRecentDay = tools.addTimeWeightEdges(G, train, A, B1, B2)
+    # current_time = tools.addTimeWeightEdges(G, train, A, B1, B2)
     # print('edges added')
 
     # This will store testing information
@@ -195,7 +179,7 @@ def main(A, B):
 
     t1 = time.time()
     with mp.Pool(CPU_CORES) as pool:
-        partial_funct = partial(testUsers, G=G, train=train, test=test, mostRecentDay=mostRecentDay, unique_items=unique_items, validation=validation, df=df)
+        partial_funct = partial(testUsers, G=G, train=train, test=test, current_time=current_time, unique_items=unique_items, validation=validation, context_df=context_df)
         for result in pool.map(partial_funct, arguments):
             df_accuracy['k'].extend(result['k'])
             df_accuracy['user_id'].extend(result['user_id'])
@@ -221,7 +205,7 @@ def main(A, B):
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
 
     # print the results
-    # print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
+    print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     if VALIDATION_TESTS:
         df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={B}_A={A}.csv')
@@ -234,7 +218,7 @@ def main(A, B):
 if __name__=="__main__":
     if VALIDATION_TESTS:
         for B_validation in B_VALUES:
-            for A_validation in A_VALUES:
+            for A_validation in T_VALUES:
                 main(A_validation,B_validation)
     else:
         main(A,B)
