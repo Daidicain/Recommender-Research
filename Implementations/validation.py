@@ -6,7 +6,7 @@ import math
 import multiprocessing as mp
 from functools import partial
 
-from Implementations.config import *
+from config import *
 
 def percentages(progress, total, position):
     h_position = position % 8
@@ -158,9 +158,9 @@ def main(T, B):
 
 if __name__=="__main__":
     # loop through validation variables
-    for B_validation in B_VALUES:
-        for T_validation in T_VALUES:
-            main(T_validation,B_validation)
+    
+    for T_validation in T_VALUES:
+        main(T_validation,SAVE_NAME)
 
     
 
