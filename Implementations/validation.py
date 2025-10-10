@@ -30,7 +30,7 @@ def percentages(progress, total, position):
     print(f"{LINE_UP}{LINE_RIGHT}{position:>3}|\033[31m{bar}\033[0m|{percent:>5.1f}%{LINE_LEFT}{LINE_DOWN}", end='\r')
 
 
-def testUsers( users, G, train, test, validation, current_time, unique_items, context_df):
+def testUsers( users, G, train, test, validation, current_time, unique_items, context_df, T):
     '''
     Purpose: runs the tests for a given set of users returning results
     Parameters: 
@@ -59,7 +59,7 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
         if len( user_items ) == 0: continue
 
         # get recommendations
-        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, B=B, k=100)   
+        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, B=B, t_window=T, k=100)   
         
         # get values to predict
         predict = set(validation[validation['user_id'] == user]['item_id'].unique())
@@ -129,7 +129,7 @@ def main(T, B):
     with mp.Pool(CPU_CORES) as pool:
 
         # these variables pass to each instance
-        partial_funct = partial(testUsers, G=G, train=train, test=test, current_time=current_time, unique_items=unique_items, validation=validation, context_df=context_df)
+        partial_funct = partial(testUsers, G=G, train=train, test=test, current_time=current_time, unique_items=unique_items, validation=validation, context_df=context_df, T=T)
         
         # get result for each group of arguments "users"
         for result in pool.map(partial_funct, arguments):
