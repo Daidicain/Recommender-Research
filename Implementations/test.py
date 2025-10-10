@@ -32,7 +32,7 @@ def percentages(progress, total, position):
     print(f"{LINE_UP}{LINE_RIGHT}{position:>3}|\033[31m{bar}\033[0m|{percent:>5.1f}%{LINE_LEFT}{LINE_DOWN}", end='\r')
 
 
-def testUsers( users, G, train, test, validation, current_time, unique_items, context_df, T=T):
+def testUsers( users, G, train, test, validation, current_time, unique_items, context_df, T):
     '''
     Purpose: runs the tests for a given set of users returning results
     Parameters: 
