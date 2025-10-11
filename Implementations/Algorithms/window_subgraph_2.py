@@ -79,7 +79,15 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
         items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
         timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
         ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
-        # print(user)
+        # print(1)
+        # for item in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
+        #     print( item[0])
+        # print(2)
+        # for item in get_subsets(items, timestamps, ratings, t_window, len(user_data), 1):
+        #     print( item[0])
+
+        # print(items)
+        # input()
         # print(*list(get_subsets(items, timestamps, t_window, len(user_data))), sep='\n')
         # input()
         # record all subsets for user
@@ -127,7 +135,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     related_context = related_context_table['context'].unique()
 
 
-
+    
     # get common items
     # initialize all items to 0
     common_items = related_context_table['item_id'].unique()
@@ -175,10 +183,9 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     
     # remove known items
     try: 
-        for item in user_items: items_ranked.pop(item)
+        for item in items: items_ranked.pop(item)
     except: 
         pass
-
 
     
     # sort neighbours by number of items in common with user
@@ -190,6 +197,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
 
         recommend.append(items_ranked.popitem()[0])
 
+    # print(len(items_ranked.items()))
 
 
     return recommend

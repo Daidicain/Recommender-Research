@@ -216,8 +216,6 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
         for item in user_items: items_ranked.pop(item)
     except: 
         pass
-
-
     
     # sort neighbours by number of items in common with user
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1])}
@@ -227,6 +225,5 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     while len(recommend) < k and not len(items_ranked) == 0:
 
         recommend.append(items_ranked.popitem()[0])
-
 
     return recommend
