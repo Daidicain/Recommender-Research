@@ -4,6 +4,7 @@
 B_VALUES = ["subset"]
 # A_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
 T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
+# T_VALUES = [1000000000]
 
 '''DATASETS'''
 DATASET = 'movielens'
@@ -16,10 +17,10 @@ DATASET = 'movielens'
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
 # SAVE_NAME = 'jaccard_coefficient'
-# SAVE_NAME = 'window'
+SAVE_NAME = 'window'
 # SAVE_NAME = 'window_rating'
 # SAVE_NAME = 'window_subgraph'
-SAVE_NAME = 'window_subgraph2'
+# SAVE_NAME = 'window_subgraph2'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -31,7 +32,7 @@ B = 0.5
 T = 1000
 
 '''SYSTEM'''
-CPU_CORES = 12 # number of cores to use
+CPU_CORES = 80 # number of cores to use
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
 

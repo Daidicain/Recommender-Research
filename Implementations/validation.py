@@ -149,7 +149,7 @@ def main(T, B):
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
 
     # save results to file
-    df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_A={T:.2f}_B={B}.csv')
+    df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={B}_A={T:.2f}.csv')
 
     # clear line
     print('\x1b[2K', end='\n')
