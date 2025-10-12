@@ -21,7 +21,7 @@ if __name__=="__main__":
     df_accuracy['recall@k'] = []
     df_accuracy['maPrecision'] = []
 
-    # for user in ['u719170']:#test['user_id'].unique():
+    # for user in ['219']:#test['user_id'].unique():
     for user in test['user_id'].unique():
         print(user)
 

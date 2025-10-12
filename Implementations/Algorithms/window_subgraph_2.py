@@ -69,7 +69,7 @@ def get_clic( user, t_window, train) -> np.array:
     ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
     
     
-    subsets = list( get_subsets(items, timestamps, ratings, t_window, len(user_data), 2) )
+    subsets = list( get_subsets(items, timestamps, ratings, t_window, len(user_data), 1) )
     if len(subsets) == 0:
         return set()
     current_clic = set(subsets[0][0])
@@ -181,7 +181,6 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     # initialize all items to 0
     common_items = related_context_table['item_id'].unique()
     items_ranked = dict.fromkeys(common_items, 0)
-
 
     # number of neighbours with the same items
     contextCounted = {} 
