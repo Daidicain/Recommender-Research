@@ -38,6 +38,7 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
         # initialize array of size count
         window: np.array = np.empty(count, dtype=np.int64)
         window_ratings: np.array = np.empty(count, dtype=np.float64)
+        window_ts: np.array = np.empty(count, dtype=np.int64)
 
         if new_window:
             # add items to array
@@ -45,14 +46,54 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
                 index = i + l # calculate index
                 window[i] = items[index] # add item at index to array
 
-            # add timestamps to array
+            # add ratings to array
             for i in range(count):
                 index = i + l # calculate index
                 window_ratings[i] = rating[index] # add item at index to array
 
+            # add timestamps to array
+            for i in range(count):
+                index = i + l # calculate index
+                window_ts[i] = timestamps[index] # add item at index to array
+
             new_window:bool = False
 
-            yield window, window_ratings
+            yield window, window_ratings, window_ts
+
+def get_clic( user, t_window, train) -> np.array:
+
+    user_data = train[train['user_id']==user]
+    # print(user_data)
+    items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
+    timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
+    ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
+    
+    
+
+    subsets = list( get_subsets(items, timestamps, ratings, t_window, len(user_data), 2) )
+    current_clic = set(subsets[0][0])
+    largest_ts = subsets[0][2][-1]
+
+    for i in range(1, len(subsets)):
+        # print('subset',subsets[i])
+        # print(largest_ts, subsets[i][2][0])
+        if subsets[i][2][0] <= largest_ts:
+            # print('new')
+            current_clic = current_clic.union( set(subsets[i][0]) )
+        else:
+
+            yield current_clic
+            # print('click', current_clic,'\n')
+
+            current_clic = set(subsets[i][0])
+            largest_ts = subsets[i][2][-1]
+
+    # print('click', current_clic,'\n')
+    yield current_clic
+    
+
+            
+
 
 
 def initialize_structures(train: np.array, unique_users: np.array, t_window: int, **kwargs) -> pd.DataFrame:
@@ -65,7 +106,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
     train= train.sort_values('ts')
 
     # initialize dictionary that will become dataframe
-    context_df = {'user_id': [],'context': [], 'item_id': [], 'rating': []}
+    context_df = {'user_id': [],'context': [], 'item_id': [], 'rating': [], 'ts': []}
 
     # start context group at 0
     context = 0
@@ -91,7 +132,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
         # print(*list(get_subsets(items, timestamps, t_window, len(user_data))), sep='\n')
         # input()
         # record all subsets for user
-        for subset, subset_rating in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
+        for subset, subset_rating, subset_ts in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
             
             # get number of items in subset
             size = len(subset)
@@ -101,6 +142,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
             context_df['context'].extend([context]*size)
             context_df['item_id'].extend(subset)
             context_df['rating'].extend(subset_rating)
+            context_df['ts'].extend(subset_ts)
            
             # increment context group
             context += 1
@@ -125,14 +167,12 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     user_data = train[train['user_id']==user]
     # print(user_data)
     items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
-    timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
-    ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
 
     # get users that share items
     related_context_table = context_df[ context_df['item_id'].isin(items) & context_df['user_id'] != user ].sort_values(['context'])
     
 
-    related_context = related_context_table['context'].unique()
+    # related_context = related_context_table['context'].unique()
 
 
     
@@ -145,8 +185,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     # number of neighbours with the same items
     contextCounted = {} 
 
-    for user_items, subset_rating in get_subsets(items, timestamps, ratings, t_window, len(user_data), 1):
-        user_items_set = set(user_items)
+    for user_click in  get_clic(user,t_window, train):
         # print(user_items_set)
         for context, context_table in related_context_table.groupby('context'):
         # for context in related_context:
@@ -162,8 +201,8 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
             # context_items = context_items_table['item_id']
            
             # (neighbour ∩ user) / (neighbour U user)
-            common_items = user_items_set.intersection(context_items)
-            unique_items = user_items_set.union(context_items)
+            common_items = user_click.intersection(context_items)
+            unique_items = user_click.union(context_items)
             jaccardCoefficient = (len(common_items) / len(unique_items))
 
             contextCounted[context] = jaccardCoefficient
