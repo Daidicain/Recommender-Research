@@ -4,10 +4,8 @@ import numpy as np
 import time
 
 GRAPH = False
-       
 
-@njit(parallel=False)
-def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
+def get_time( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
     '''
     Purpose: This is a generator that generates all subsets of size t_window
     Parameters: 
@@ -17,13 +15,16 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
         size -> The number of elements in the array
     Return: Iteratively each subset of items t_window apart
     '''
-    # This specifies the initial right index of window
-    diff: int = 0
+
+    # This specifies the initial t window size
+    t_window: int = 0
 
     # This generates all subsets where l > 0
-    for l in range(0, size - 1):
+    for i in range(0, size - 1):
+        if timestamps[i+1] - timestamps[i] > t_window:
+            t_window = timestamps[i+1] - timestamps[i]
 
-        
+    return t_window
 
 @njit(parallel=False)
 def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
@@ -36,6 +37,17 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
         size -> The number of elements in the array
     Return: Iteratively each subset of items t_window apart
     '''
+
+    # This specifies the initial t window size
+    t_window: int = 0
+
+    # This generates all subsets where l > 0
+    for i in range(0, size - 1):
+        if timestamps[i+1] - timestamps[i] > t_window:
+            t_window = timestamps[i+1] - timestamps[i]
+
+    t_window *= 5
+
     # This specifies the initial right index of window
     r: int = 0
     new_window: bool = False
@@ -130,6 +142,8 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
 
     # start context group at 0
     context = 0
+
+    temp = []
     
     # create all subsets for user
     for user in unique_users:
@@ -140,17 +154,9 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
         items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
         timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
         ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
-        # print(1)
-        # for item in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
-        #     print( item[0])
-        # print(2)
-        # for item in get_subsets(items, timestamps, ratings, t_window, len(user_data), 1):
-        #     print( item[0])
 
-        # print(items)
-        # input()
-        # print(*list(get_subsets(items, timestamps, t_window, len(user_data))), sep='\n')
-        # input()
+        temp.append(get_time(items, timestamps, ratings, t_window, len(user_data), 2))
+
         # record all subsets for user
         for subset, subset_rating, subset_ts in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
             
@@ -166,6 +172,9 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
            
             # increment context group
             context += 1
+
+    # print(max(temp), sum(temp)/len(temp), temp[round(len(temp)/2)])
+    # exit()
 
     # convert dictionary to dataframe
     context_df = pd.DataFrame(context_df, columns=context_df.keys())
