@@ -7,9 +7,9 @@ T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
 # T_VALUES = [1000000000]
 
 '''DATASETS'''
-DATASET = 'movielens'
+# DATASET = 'movielens'
 # DATASET = 'netflix'
-# DATASET = 'amazon'
+DATASET = 'amazon'
 # DATASET = 'epinions'
 # DATASET = 'myket'
 
@@ -20,8 +20,8 @@ DATASET = 'movielens'
 # SAVE_NAME = 'window'
 # SAVE_NAME = 'window_rating'
 # SAVE_NAME = 'window_subgraph'
-# SAVE_NAME = 'window_subgraph2'
-SAVE_NAME = 'clics'
+SAVE_NAME = 'window_subgraph2'
+# SAVE_NAME = 'clics'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -30,10 +30,10 @@ SAVE_NAME = 'clics'
 '''VARIABLES'''
 A = 1000000000
 B = 0.5
-T = 1000
+T = 100000000
 
 '''SYSTEM'''
-CPU_CORES = 80 # number of cores to use
+CPU_CORES = 40 # number of cores to use
 RANDOM_STATE = 45 # keeps tests consistent between runs
 
 

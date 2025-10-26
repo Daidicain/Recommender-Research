@@ -46,7 +46,7 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
         if timestamps[i+1] - timestamps[i] > t_window:
             t_window = timestamps[i+1] - timestamps[i]
 
-    t_window *= 5
+    t_window *= 4
 
     # This specifies the initial right index of window
     r: int = 0
