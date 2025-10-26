@@ -9,9 +9,9 @@ T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
 '''DATASETS'''
 # DATASET = 'movielens'
 # DATASET = 'netflix'
-DATASET = 'amazon'
+# DATASET = 'amazon'
 # DATASET = 'epinions'
-# DATASET = 'myket'
+DATASET = 'myket'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
@@ -21,16 +21,16 @@ DATASET = 'amazon'
 # SAVE_NAME = 'window_rating'
 # SAVE_NAME = 'window_subgraph'
 # SAVE_NAME = 'windowSubgraph2'
-SAVE_NAME = 'clics'
+# SAVE_NAME = 'clics'
 # SAVE_NAME = 'link_score'
-# SAVE_NAME = 'preferential_attachment'
+SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
 # SAVE_NAME = 'time_score'
 
 '''VARIABLES'''
 A = 1000000000
 B = 0.5
-T = 100000000
+T = 1000000000
 
 '''SYSTEM'''
 CPU_CORES = 40 # number of cores to use
