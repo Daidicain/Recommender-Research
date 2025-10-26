@@ -23,11 +23,11 @@ for test in TESTS:
     
     print(test)
     for results_file in directory_list:
-        print(results_file)
+        # print(results_file)
         A = results_file.split("A=")[1].split('.csv')[0].lstrip('0')
-        print("A",A)
+        # print(A)
         B = results_file.split("B=")[1].split('_')[0]
-        print("B",B)
+        # print(B)
         if A not in df_results:
             df_results[A] = []
         if B not in df_results['B']:
@@ -49,7 +49,7 @@ for test in TESTS:
 
         df_results[A].append(algorithm_results)
 
-    print(df_results)
+    # print(df_results)
     df_results = pd.DataFrame(df_results, columns=df_results.keys())
 
     print(df_results)
