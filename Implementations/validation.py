@@ -117,6 +117,7 @@ def main(T, B):
 
     # Initializes the Progress Bars
     print(f'\n{"-"*79} Process Progress {"-"*79}') # title
+    print(SAVE_NAME)
     print(f'B={B}, T={T}')
 
     statement = f'' # initial statment
