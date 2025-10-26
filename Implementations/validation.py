@@ -47,6 +47,9 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
     # get current process name
     p = mp.current_process()._identity[0] -1
 
+    # normalize name when new process is created for mulitple validation tests.
+    p = p % CPU_CORES
+
     for index, user in enumerate(users):
 
         # update progress
@@ -114,6 +117,7 @@ def main(T, B):
 
     # Initializes the Progress Bars
     print(f'\n{"-"*79} Process Progress {"-"*79}') # title
+    print(SAVE_NAME)
     print(f'B={B}, T={T}')
 
     statement = f'' # initial statment
