@@ -4,27 +4,7 @@ import numpy as np
 import time
 
 GRAPH = False
-
-def get_time( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
-    '''
-    Purpose: This is a generator that generates all subsets of size t_window
-    Parameters: 
-        Items -> Items that belong to user
-        Timestamps -> when an item was rated
-        t_window -> The acceptable width of a window
-        size -> The number of elements in the array
-    Return: Iteratively each subset of items t_window apart
-    '''
-
-    # This specifies the initial t window size
-    t_window: int = 0
-
-    # This generates all subsets where l > 0
-    for i in range(0, size - 1):
-        if timestamps[i+1] - timestamps[i] > t_window:
-            t_window = timestamps[i+1] - timestamps[i]
-
-    return t_window
+       
 
 @njit(parallel=False)
 def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
@@ -37,17 +17,6 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
         size -> The number of elements in the array
     Return: Iteratively each subset of items t_window apart
     '''
-
-    # This specifies the initial t window size
-    t_window: int = 0
-
-    # This generates all subsets where l > 0
-    for i in range(0, size - 1):
-        if timestamps[i+1] - timestamps[i] > t_window:
-            t_window = timestamps[i+1] - timestamps[i]
-
-    t_window *= 5
-
     # This specifies the initial right index of window
     r: int = 0
     new_window: bool = False
@@ -91,37 +60,64 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
 
             yield window, window_ratings, window_ts
 
-def get_clic( user, t_window, train) -> np.array:
+@njit(parallel=False)
+def get_clic( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
+    '''
+    Purpose: This is a generator that generates all subsets of size t_window
+    Parameters: 
+        Items -> Items that belong to user
+        Timestamps -> when an item was rated
+        t_window -> The acceptable width of a window
+        size -> The number of elements in the array
+    Return: Iteratively each subset of items t_window apart
+    '''
+    # This specifies the initial right index of window
+    r: int = 0
+    l: int = 0
+    new_window: bool = False
 
-    user_data = train[train['user_id']==user]
-    # print(user_data)
-    items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
-    timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
-    ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
-    
-    
-    subsets = list( get_subsets(items, timestamps, ratings, t_window, len(user_data), 1) )
-    if len(subsets) == 0:
-        return set()
-    current_clic = set(subsets[0][0])
-    largest_ts = subsets[0][2][-1]
+    # This generates all subsets where l > 0
+    while l < size:
+        # print('l',l)
 
-    for i in range(1, len(subsets)):
-        # print('subset',subsets[i])
-        # print(largest_ts, subsets[i][2][0])
-        if subsets[i][2][0] <= largest_ts:
-            # print('new')
-            current_clic = current_clic.union( set(subsets[i][0]) )
-        else:
+        # find gap of size t_window
+        while r < (size) and timestamps[r] < (timestamps[r-1] + t_window):
+            r += 1
+            # print(l,r)
+        
+        # get number of items in array
+        count: int = r - l
 
-            yield current_clic
-            # print('click', current_clic,'\n')
+        # skip windows less than minimum size
+        if count < minimum_size: continue
+ 
+        # initialize array of size count
+        window: np.array = np.empty(count, dtype=np.int64)
+        window_ratings: np.array = np.empty(count, dtype=np.float64)
+        window_ts: np.array = np.empty(count, dtype=np.int64)
 
-            current_clic = set(subsets[i][0])
-            largest_ts = subsets[i][2][-1]
+        # add items to array
+        for i in range(count):
+            index = i + l # calculate index
+            window[i] = items[index] # add item at index to array
 
-    # print('click', current_clic,'\n')
-    yield current_clic
+        # add ratings to array
+        for i in range(count):
+            index = i + l # calculate index
+            window_ratings[i] = rating[index] # add item at index to array
+
+        # add timestamps to array
+        for i in range(count):
+            index = i + l # calculate index
+            window_ts[i] = timestamps[index] # add item at index to array
+
+        new_window:bool = False
+
+        yield window, window_ratings, window_ts
+        
+        l = r
+        r += 1
+
     
 
             
@@ -142,8 +138,6 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
 
     # start context group at 0
     context = 0
-
-    temp = []
     
     # create all subsets for user
     for user in unique_users:
@@ -154,9 +148,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
         items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
         timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
         ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
-
-        temp.append(get_time(items, timestamps, ratings, t_window, len(user_data), 2))
-
+        
         # record all subsets for user
         for subset, subset_rating, subset_ts in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
             
@@ -172,9 +164,6 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
            
             # increment context group
             context += 1
-
-    # print(max(temp), sum(temp)/len(temp), temp[round(len(temp)/2)])
-    # exit()
 
     # convert dictionary to dataframe
     context_df = pd.DataFrame(context_df, columns=context_df.keys())
@@ -196,6 +185,8 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     user_data = train[train['user_id']==user]
     # print(user_data)
     items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
+    timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
+    ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
 
     # get users that share items
     related_context_table = context_df[ context_df['item_id'].isin(items) & context_df['user_id'] != user ].sort_values(['context'])
@@ -213,7 +204,9 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     # number of neighbours with the same items
     contextCounted = {} 
 
-    for user_click in  get_clic(user,t_window, train):
+    for subset, subset_rating, subset_ts in  get_clic(items, timestamps, ratings, t_window, len(user_data), 1):
+
+        user_click = set(subset)
         # print(user_items_set)
         for context, context_table in related_context_table.groupby('context'):
         # for context in related_context:
