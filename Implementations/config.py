@@ -20,8 +20,8 @@ DATASET = 'amazon'
 # SAVE_NAME = 'window'
 # SAVE_NAME = 'window_rating'
 # SAVE_NAME = 'window_subgraph'
-SAVE_NAME = 'windowSubgraph2'
-# SAVE_NAME = 'clics'
+# SAVE_NAME = 'windowSubgraph2'
+SAVE_NAME = 'cluster'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -101,6 +101,6 @@ if SAVE_NAME == 'window_rating': from Algorithms.window_rating import *
 if SAVE_NAME == 'window_subgraph': from Algorithms.window_subgraph import *
 if SAVE_NAME == 'windowSubgraph2': from Algorithms.window_subgraph_2 import *
 if SAVE_NAME == 'window': from Algorithms.window import *
-if SAVE_NAME == 'clics': from Algorithms.window_clic import *
+if SAVE_NAME == 'cluster': from Algorithms.windowCluster import *
 
 
