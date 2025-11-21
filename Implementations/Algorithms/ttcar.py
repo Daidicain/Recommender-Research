@@ -60,7 +60,7 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
 
             yield window, window_ratings, window_ts
 
-def get_clic( user, t_window, train) -> set:
+def get_clic( user, t_window, train):
     '''
     Purpose: Clusters subsets by overlap
     Paramters: user, windowsize, and data
