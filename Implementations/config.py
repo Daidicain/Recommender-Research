@@ -20,8 +20,9 @@ DATASET = 'netflix'
 # SAVE_NAME = 'window'
 # SAVE_NAME = 'window_rating'
 # SAVE_NAME = 'window_subgraph'
-SAVE_NAME = 'windowSubgraph2'
+# SAVE_NAME = 'windowSubgraph2'
 # SAVE_NAME = 'cluster'
+SAVE_NAME = 'ttcar'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
@@ -96,11 +97,12 @@ if SAVE_NAME == 'jaccard_coefficient': from Algorithms.jaccard_coefficient impor
 if SAVE_NAME == 'preferential_attachment': from Algorithms.preferential_attachment import *
 if SAVE_NAME == 'time_score': from Algorithms.time_score import *
 if SAVE_NAME == 'link_score': from Algorithms.link_score import *
-if SAVE_NAME == 'temporal': from Algorithms.temporal import *
-if SAVE_NAME == 'window_rating': from Algorithms.window_rating import *
-if SAVE_NAME == 'window_subgraph': from Algorithms.window_subgraph import *
+if SAVE_NAME == 'temporal': from Implementations.Algorithms.Archive.temporal import *
+if SAVE_NAME == 'window_rating': from Implementations.Algorithms.Archive.window_rating import *
+if SAVE_NAME == 'window_subgraph': from Implementations.Algorithms.Archive.window_subgraph import *
 if SAVE_NAME == 'windowSubgraph2': from Algorithms.window_subgraph_2 import *
-if SAVE_NAME == 'window': from Algorithms.window import *
+if SAVE_NAME == 'window': from Implementations.Algorithms.Archive.window import *
 if SAVE_NAME == 'cluster': from Algorithms.windowCluster import *
+if SAVE_NAME == 'ttcar': from Algorithms.ttcar import *
 
 
