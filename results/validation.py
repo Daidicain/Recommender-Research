@@ -7,15 +7,16 @@ COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
 # the different tests that were run
 TESTS = ['precision@k','recall@k','maPrecision']
 
-DATASET = 'movielens'
-# DATASET = 'netflix'
+# DATASET = 'movielens'
+DATASET = 'netflix'
 # DATASET = 'amazon'
 # DATASET = 'myket'
+# DATASET = 'epinions'
 
 # directory of the csv's
 directory_list = os.listdir(f'results/csv/validation/{DATASET}/')           
 
-
+directory_list = sorted(directory_list)
 
 for test in TESTS:
     df_results = {'B':[]}

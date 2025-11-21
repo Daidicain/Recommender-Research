@@ -155,7 +155,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
 
             user_rating = user_items[user_items['item_id'] == item]['rating'].item() # first rating
             context_rating = context_items_table[context_items_table['item_id'] == item]['rating'].item() # second rating
-            rating_difference += (-0.25 * abs(user_rating - context_rating)  + 1)/total_common_items # linear formula
+            rating_difference += (-0.1 * abs(user_rating - context_rating)  + 1)/total_common_items # linear formula
 
         # print(rating_difference)
         # input()
