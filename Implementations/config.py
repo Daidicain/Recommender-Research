@@ -3,13 +3,13 @@
 # B_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
 B_VALUES = ["subset"]
 # A_VALUES = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1]
-# T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
-T_VALUES = [10,100,1000,10000,100000]
+T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
+# T_VALUES = [100000, 1000000,10000000,100000000,1000000000]
 
 '''DATASETS'''
 # DATASET = 'movielens'
-# DATASET = 'netflix'
-DATASET = 'amazon'
+DATASET = 'netflix'
+# DATASET = 'amazon'
 # DATASET = 'epinions'
 # DATASET = 'myket'
 
@@ -20,8 +20,8 @@ DATASET = 'amazon'
 # SAVE_NAME = 'window'
 # SAVE_NAME = 'window_rating'
 # SAVE_NAME = 'window_subgraph'
-# SAVE_NAME = 'windowSubgraph2'
-SAVE_NAME = 'cluster'
+SAVE_NAME = 'windowSubgraph2'
+# SAVE_NAME = 'cluster'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
