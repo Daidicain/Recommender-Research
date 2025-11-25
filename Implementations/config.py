@@ -8,10 +8,10 @@ T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
 
 '''DATASETS'''
 # DATASET = 'movielens'
-DATASET = 'netflix'
+# DATASET = 'netflix'
 # DATASET = 'amazon'
 # DATASET = 'epinions'
-# DATASET = 'myket'
+DATASET = 'myket'
 
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
@@ -22,11 +22,11 @@ DATASET = 'netflix'
 # SAVE_NAME = 'window_subgraph'
 # SAVE_NAME = 'windowSubgraph2'
 # SAVE_NAME = 'cluster'
-SAVE_NAME = 'ttcar'
+# SAVE_NAME = 'ttcar'
 # SAVE_NAME = 'link_score'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'temporal'
-# SAVE_NAME = 'time_score'
+SAVE_NAME = 'time_score'
 
 '''VARIABLES'''
 A = 1000000000

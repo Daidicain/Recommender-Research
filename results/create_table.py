@@ -8,7 +8,7 @@ COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
 # the different tests that were run
 TESTS = ['precision@k','recall@k','maPrecision']
 
-k_values = [1,5,10]
+k_values = [1,5,10,20]
 
 # directory of the csv's
 directory_list = os.listdir('results/csv/test/') 
@@ -20,7 +20,7 @@ for dataset in directory_list:
     # check if folder
     if not '.' in dataset:
 
-        all_data = {'algorithm':[], 'k':[], 'Precision@k':[], 'Recall@k':[], 'Mean Average Precision@k':[]}
+        all_data = {'dataset':[], 'algorithm':[], 'k':[], 'Precision@k':[], 'Recall@k':[], 'Mean Average Precision@k':[]}
 
         # directory of dataset
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
@@ -44,15 +44,15 @@ for dataset in directory_list:
                 algorithm_results = algorithm_results.groupby('k')[['precision@k', 'recall@k', 'maPrecision']].mean()
                 
                 for k in k_values:
-                    # all_data['dataset'].append(dataset)
+                    all_data['dataset'].append(dataset)
                     all_data['algorithm'].append(algorithm.split('.csv')[0])
                     all_data['k'].append(k)
 
-                    all_data['Precision@k'].append(algorithm_results.loc[k]['precision@k'])
+                    all_data['Precision@k'].append(algorithm_results.loc[k]['precision@k'] * 100 )
 
-                    all_data['Recall@k'].append(algorithm_results.loc[k]['recall@k'])
+                    all_data['Recall@k'].append(algorithm_results.loc[k]['recall@k'] * 100 )
 
-                    all_data['Mean Average Precision@k'].append(algorithm_results.loc[k]['maPrecision'])
+                    all_data['Mean Average Precision@k'].append(algorithm_results.loc[k]['maPrecision'] * 100 )
 
                 # print(all)
 

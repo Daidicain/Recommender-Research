@@ -9,8 +9,8 @@ TESTS = ['precision@k','recall@k','maPrecision']
 
 # DATASET = 'movielens'
 # DATASET = 'netflix'
-# DATASET = 'amazon'
-DATASET = 'myket'
+DATASET = 'amazon'
+# DATASET = 'myket'
 # DATASET = 'epinions'
 
 # directory of the csv's
