@@ -50,6 +50,9 @@ def readData(path: str, column_names: list, random_state: int, delimiter: str, s
     df['rating'] = df['rating'].astype(float)
     df['ts'] = df['ts'].astype(int)
 
+    df['rating'] = 1
+    print('all ratings set to 1')
+
     # sort table by timestamps
     df = df.sort_values(by='ts')
 

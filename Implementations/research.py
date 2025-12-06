@@ -33,7 +33,7 @@ if __name__=="__main__":
 
         # get recommendations
         
-        recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items,t_window=T , k=100)  
+        recommendations = recommender_algorithm(G=G, B=B, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items,t_window=T , k=100)  
         predict = set(test[test['user_id'] == user]['item_id'].unique())
 
 
