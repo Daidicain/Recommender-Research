@@ -80,6 +80,11 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
             df_accuracy["precision@k"].append(precisionAtK)
             df_accuracy['recall@k'].append(recallAtK)
             df_accuracy['maPrecision'].append(meanAPrecision)
+
+        recommend = list(map(str, recommendations[:len(predict)]))
+        predict2 = list(map(str, predict))
+        with open(f'results/csv/test/{DATASET}/{SAVE_NAME}_recommendations.csv', "+a") as file:
+            file.write(f"user: {user}\n{'recommend':<12},{','.join(recommend)}\n{'predict':<12},{','.join(predict2)}\n")
     
      # finalize progress bar
     percentages(1, 1, p)
@@ -125,6 +130,10 @@ def main(T, B):
         if i % 8 == 0: statement += "\n"
         statement += f'{i:>3}|\033[31m          \033[0m|  0.0% '
     print( statement ) # progress bar
+
+    # initialize recommendations file
+    with open(f'results/csv/test/{DATASET}/{SAVE_NAME}_recommendations.csv', "+a") as file:
+            file.write(f"recommendations and predictions for each user\n")
 
     # start timer
     t1 = time.time()
