@@ -19,17 +19,22 @@ def user_split(df, unique_users, random_state):
     return: 3 sets train, test, and validation
     '''
     for user in unique_users:
+        
         user_entries = df[df['user_id'] == user] # get entries that belong to user
 
-        number_of_training = round(len(user_entries)*0.6) # find number of first entries
+        try:
+            number_of_training = round(len(user_entries)*0.6) # find number of first entries
 
-        train = user_entries.head(number_of_training) # first 60% of entries is train
+            train = user_entries.head(number_of_training) # first 60% of entries is train
 
-        test_validation_set = user_entries.tail( len(user_entries) - number_of_training) # get remaining items
+            test_validation_set = user_entries.tail( len(user_entries) - number_of_training) # get remaining items
 
-        test, validation = train_test_split(test_validation_set, test_size=0.5, random_state=random_state) # split remaining items randomly to find test and validation
+            test, validation = train_test_split(test_validation_set, test_size=0.5, random_state=random_state) # split remaining items randomly to find test and validation
   
-        yield train, test, validation
+            yield train, test, validation
+
+        except:
+            print(f"user {user} failed\n{user_entries}")
 
 def readData(path: str, column_names: list, random_state: int, delimiter: str, skiprows: int, GRAPH:bool):
     '''
