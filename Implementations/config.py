@@ -43,8 +43,8 @@ DATA = {
     'movielens' : {
         'DATAPATH' : "Datasets/movielens/ratings.csv",
         'COLUMN_NAMES' : ["user_id","item_id","rating","ts"],
-        'DELIMITER' : "	",
-        'SKIPROWS' : 0
+        'DELIMITER' : ",",
+        'SKIPROWS' : 1
     },
     'amazon' : {
         'DATAPATH' : "Datasets/amazon/amazon_sample.csv",
