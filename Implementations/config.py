@@ -41,7 +41,7 @@ RANDOM_STATE = 45 # keeps tests consistent between runs
 '''load data info'''
 DATA = { 
     'movielens' : {
-        'DATAPATH' : "Datasets/movielens/u.data",
+        'DATAPATH' : "Datasets/movielens/ratings.csv",
         'COLUMN_NAMES' : ["user_id","item_id","rating","ts"],
         'DELIMITER' : "	",
         'SKIPROWS' : 0
