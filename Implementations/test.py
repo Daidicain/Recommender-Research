@@ -9,7 +9,6 @@ from functools import partial
 
 from config import *
 
-
 def percentages(progress, total, position):
     h_position = position % 8
     v_position = math.ceil(CPU_CORES/8) - math.floor(position / 8)
@@ -39,7 +38,6 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
     Results: 
     '''
 
-
     df_accuracy = {}
     df_accuracy['k'] = []
     df_accuracy['user_id'] = []
@@ -50,8 +48,11 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
     # get current process name
     p = mp.current_process()._identity[0] -1
 
+    # normalize name when new process is created for mulitple validation tests.
+    p = p % CPU_CORES
+
     for index, user in enumerate(users):
-        
+
         # update progress
         percentages(index, len(users), p)
 
@@ -65,8 +66,7 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
         recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, B=B, t_window=T, k=100)   
         
         # get values to predict
-        predict = set(validation[validation['user_id'] == user]['item_id'].unique())
-        predict = predict.union(set(test[test['user_id'] == user]['item_id'].unique()))
+        predict = set(test[test['user_id'] == user]['item_id'].unique())
         
         for k in range(1,101):
             # get test results
@@ -86,7 +86,7 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
         with open(f'results/csv/test/{DATASET}/{SAVE_NAME}_recommendations.csv', "+a") as file:
             file.write(f"user: {user}\n{'recommend':<12},{','.join(recommend)}\n{'predict':<12},{','.join(predict2)}\n")
     
-     # finalize progress bar
+    # finalize progress bar
     percentages(1, 1, p)
         
     return df_accuracy
@@ -122,7 +122,7 @@ def main(T, B):
 
     # Initializes the Progress Bars
     print(f'\n{"-"*79} Process Progress {"-"*79}') # title
-    print(f'{SAVE_NAME}')
+    print(SAVE_NAME)
     print(f'B={B}, T={T}')
 
     statement = f'' # initial statment
@@ -170,7 +170,6 @@ def main(T, B):
 
     # convert from dictionary to a dataframe
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
-
     # print the results for quick reference
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
