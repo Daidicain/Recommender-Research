@@ -106,9 +106,8 @@ def main(T, B):
     df_accuracy['recall@k'] = []
     df_accuracy['maPrecision'] = []
 
-
     # get users
-    users = validation['user_id'].unique()
+    users = test['user_id'].unique()
 
     # split users into groups for each core
     arguments = []
@@ -151,6 +150,8 @@ def main(T, B):
 
     # convert from dictionary to a dataframe
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
+    # print the results for quick reference
+    print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     # save results to file
     df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={SAVE_NAME}_A={T}.csv')
