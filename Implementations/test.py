@@ -66,7 +66,8 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
         recommendations = recommender_algorithm(G=G, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items, B=B, t_window=T, k=100)   
         
         # get values to predict
-        predict = set(test[test['user_id'] == user]['item_id'].unique())
+        predict = set(validation[validation['user_id'] == user]['item_id'].unique())
+        predict = predict.union(set(test[test['user_id'] == user]['item_id'].unique()))
         
         for k in range(1,101):
             # get test results
