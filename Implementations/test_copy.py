@@ -1,12 +1,14 @@
 import pandas as pd
 import time
 import tools
+import json
 import math
 
 import multiprocessing as mp
 from functools import partial
 
 from config import *
+
 
 def percentages(progress, total, position):
     h_position = position % 8
@@ -37,6 +39,7 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
     Results: 
     '''
 
+
     df_accuracy = {}
     df_accuracy['k'] = []
     df_accuracy['user_id'] = []
@@ -47,11 +50,8 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
     # get current process name
     p = mp.current_process()._identity[0] -1
 
-    # normalize name when new process is created for mulitple validation tests.
-    p = p % CPU_CORES
-
     for index, user in enumerate(users):
-
+        
         # update progress
         percentages(index, len(users), p)
 
@@ -66,6 +66,7 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
         
         # get values to predict
         predict = set(validation[validation['user_id'] == user]['item_id'].unique())
+        predict = predict.union(set(test[test['user_id'] == user]['item_id'].unique()))
         
         for k in range(1,101):
             # get test results
@@ -79,8 +80,13 @@ def testUsers( users, G, train, test, validation, current_time, unique_items, co
             df_accuracy["precision@k"].append(precisionAtK)
             df_accuracy['recall@k'].append(recallAtK)
             df_accuracy['maPrecision'].append(meanAPrecision)
+
+        recommend = list(map(str, recommendations[:len(predict)]))
+        predict2 = list(map(str, predict))
+        with open(f'results/csv/test/{DATASET}/{SAVE_NAME}_recommendations.csv', "+a") as file:
+            file.write(f"user: {user}\n{'recommend':<12},{','.join(recommend)}\n{'predict':<12},{','.join(predict2)}\n")
     
-    # finalize progress bar
+     # finalize progress bar
     percentages(1, 1, p)
         
     return df_accuracy
@@ -106,9 +112,8 @@ def main(T, B):
     df_accuracy['recall@k'] = []
     df_accuracy['maPrecision'] = []
 
-
     # get users
-    users = validation['user_id'].unique()
+    users = test['user_id'].unique()
 
     # split users into groups for each core
     arguments = []
@@ -117,7 +122,7 @@ def main(T, B):
 
     # Initializes the Progress Bars
     print(f'\n{"-"*79} Process Progress {"-"*79}') # title
-    print(SAVE_NAME)
+    print(f'{SAVE_NAME}')
     print(f'B={B}, T={T}')
 
     statement = f'' # initial statment
@@ -125,6 +130,10 @@ def main(T, B):
         if i % 8 == 0: statement += "\n"
         statement += f'{i:>3}|\033[31m          \033[0m|  0.0% '
     print( statement ) # progress bar
+
+    # initialize recommendations file
+    with open(f'results/csv/test/{DATASET}/{SAVE_NAME}_recommendations.csv', "+a") as file:
+            file.write(f"recommendations and predictions for each user\n")
 
     # start timer
     t1 = time.time()
@@ -148,14 +157,25 @@ def main(T, B):
     # print time elapsed
     print(f'time elapsed:{time.time()-t1:2.2f}s')
 
+    # Record time to run
+    with open("results/output/time_results.json", "r") as file:
+        json_file = json.load(file)
+    
+    if DATASET not in json_file.keys(): json_file[DATASET] = {}
+    json_file[DATASET][SAVE_NAME] = time.time()-t1
+
+    with open("results/output/time_results.json", "w") as file:
+        json.dump(json_file, file, indent=4)
+
 
     # convert from dictionary to a dataframe
     df_accuracy = pd.DataFrame(df_accuracy, columns=df_accuracy.keys())
+
     # print the results for quick reference
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     # save results to file
-    df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={SAVE_NAME}_A={T}.csv')
+    df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
 
     # clear line
     print('\x1b[2K', end='\n')
@@ -163,11 +183,8 @@ def main(T, B):
 
 
 if __name__=="__main__":
-    # loop through validation variables
     
-    for T_validation in T_VALUES:
-        main(T_validation,SAVE_NAME)
-
+    main(T,B)
     
 
 

@@ -8,6 +8,7 @@ T_VALUES = [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000 ]
 
 '''DATASETS'''
 # DATASET = 'movielens'
+# DATASET = 'movielens2'
 # DATASET = 'netflix'
 # DATASET = 'amazon'
 # DATASET = 'epinions'
@@ -45,6 +46,12 @@ DATA = {
         'COLUMN_NAMES' : ["user_id","item_id","rating","ts"],
         'DELIMITER' : ",",
         'SKIPROWS' : 1
+    },
+    'movielens2' : {
+        'DATAPATH' : "Datasets/movielens/u.data",
+        'COLUMN_NAMES' : ["user_id","item_id","rating","ts"],
+        'DELIMITER' : "	",
+        'SKIPROWS' : 0
     },
     'amazon' : {
         'DATAPATH' : "Datasets/amazon/amazon_sample.csv",
