@@ -41,6 +41,7 @@ def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
     # Get items that belong to user
     user_items = tools.extractTuple( G.edges(user) )
 
+
     # get users that share items
     related_users = set(tools.extractTuple( G.edges(user_items) ))
 
@@ -112,7 +113,7 @@ def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
     
     # sort neighbours by number of items in common with user
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1])}
-    
+   
     # List to recommend
     recommend = list()
     while len(recommend) < k and not len(items_ranked) == 0:

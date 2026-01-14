@@ -12,7 +12,7 @@ if __name__=="__main__":
     print('users: ',len(unique_users),'items: ', len(unique_items))    
 
     # initialize stuctures
-    G, current_time, context_df = initialize_structures(train=train, unique_users=unique_users, unique_items=unique_items, t_window=1000)
+    G, current_time, context_df = initialize_structures(train=train, unique_users=unique_users, unique_items=unique_items, t_window=T)
     
     # This will store testing information
     df_accuracy = {}
@@ -24,7 +24,6 @@ if __name__=="__main__":
     # for user in ['219']:#test['user_id'].unique():
     for user in test['user_id'].unique():
         print(user)
-
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
 

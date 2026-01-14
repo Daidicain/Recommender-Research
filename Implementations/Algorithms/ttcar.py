@@ -20,10 +20,9 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
     # This specifies the initial right index of window
     r: int = 0
     new_window: bool = False
-
+      
     # This generates all subsets where l > 0
     for l in range(0, size - 1):
-
         # find max r index for window
         while r < (size) and timestamps[r] < (timestamps[l] + t_window):
             r += 1
@@ -134,6 +133,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
 
         # get list of items and timestamps for user
         user_data = train[train['user_id']==user]
+        
         items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
         timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
         ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
@@ -154,6 +154,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
             # get number of items in subset
             size = len(subset)
             
+            
             # record results
             context_df['user_id'].extend([user]*size)
             context_df['context'].extend([context]*size)
@@ -163,6 +164,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
            
             # increment context group
             context += 1
+
 
     # convert dictionary to dataframe
     context_df = pd.DataFrame(context_df, columns=context_df.keys())
@@ -182,7 +184,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     # Get items that belong to user
     # get list of items and timestamps for user
     user_data = train[train['user_id']==user]
-    # print(user_data)
+    
     items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
 
     # get users that share items
@@ -202,7 +204,6 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     contextCounted = {} 
 
     for user_click in  get_clic(user,t_window, train):
-        # print(user_items_set)
         for context, context_table in related_context_table.groupby('context'):
         # for context in related_context:
 
@@ -235,7 +236,6 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
             
             # print('dict', time.time() - t)
         # input()
-    
     # remove known items
     try: 
         for item in items: items_ranked.pop(item)
