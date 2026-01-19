@@ -112,7 +112,11 @@ def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
 
     
     # sort neighbours by number of items in common with user
+    items_ranked = {k: v for k, v in sorted(items_ranked.items())}
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1]) if v != 0}
+    # print(len(items_ranked.keys()))
+    # print(items_ranked)
+    # input()
     # List to recommend
     recommend = list()
     while len(recommend) < k and not len(items_ranked) == 0:

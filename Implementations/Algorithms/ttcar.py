@@ -188,7 +188,11 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
 
     # get users that share items
-    related_context_table = context_df[ context_df['item_id'].isin(items) & context_df['user_id'] != user ].sort_values(['context'])
+    
+    related_users = context_df[ context_df['item_id'].isin(items) ]['user_id'].unique()
+    related_context_table = context_df[ context_df['user_id'].isin(related_users) ]
+    related_context_table = context_df[ context_df['user_id'] != user ].sort_values(['context'])
+    # related_context_table = context_df[ context_df['item_id'].isin(items) & context_df['user_id'] != user ].sort_values(['context'])
     
 
     # related_context = related_context_table['context'].unique()
@@ -197,7 +201,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     
     # get common items
     # initialize all items to 0
-    common_items = related_context_table['item_id'].unique()
+    common_items = train['item_id'].unique()
     items_ranked = dict.fromkeys(common_items, 0)
 
     # number of neighbours with the same items
@@ -244,7 +248,11 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
 
     
     # sort neighbours by number of items in common with user
+    items_ranked = {k: v for k, v in sorted(items_ranked.items())}
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1]) if v != 0}
+    # print(len(items_ranked.keys()))
+    # print(items_ranked)
+    # input()
     # List to recommend
     recommend = list()
     while len(recommend) < k and not len(items_ranked) == 0:

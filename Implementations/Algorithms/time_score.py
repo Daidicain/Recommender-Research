@@ -106,6 +106,7 @@ def recommender_algorithm(train: pd.DataFrame, user: str, unique_items, current_
     itemsSorted = itemsSorted[itemsSorted['score']>0]
 
     # Sort items by score
+    # itemsSorted = itemsSorted.sort_values(by='score', ascending=False)
     itemsSorted = itemsSorted.sort_values(by='score', ascending=False)
 
     # print('time taken:',time.time() - t)
