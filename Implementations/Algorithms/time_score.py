@@ -102,6 +102,9 @@ def recommender_algorithm(train: pd.DataFrame, user: str, unique_items, current_
     # convert two arrays into dataframe
     itemsSorted = pd.DataFrame({"items": potential_items, "score": TS})
 
+    # remove 0's
+    itemsSorted = itemsSorted[itemsSorted['score']>0]
+
     # Sort items by score
     itemsSorted = itemsSorted.sort_values(by='score', ascending=False)
 

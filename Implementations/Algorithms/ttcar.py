@@ -244,15 +244,11 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
 
     
     # sort neighbours by number of items in common with user
-    items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1])}
-    
+    items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1]) if v != 0}
     # List to recommend
     recommend = list()
     while len(recommend) < k and not len(items_ranked) == 0:
-
-        recommend.append(items_ranked.popitem()[0])
-
-    # print(len(items_ranked.items()))
-
+        item = items_ranked.popitem()[0]
+        recommend.append(item)
 
     return recommend
