@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 # open csvs
-COLUMNS = ['k', 'precision@k', 'recall@k', 'maPrecision']
+COLUMNS = ['k', 'user_id', 'precision@k', 'recall@k', 'maPrecision']
 
 # the different tests that were run
 TESTS = ['precision@k','recall@k','maPrecision']
@@ -31,7 +31,7 @@ for dataset in directory_list:
         for algorithm in algorithms_list:
             
             # check if csv file
-            if '.csv' in algorithm:
+            if '.csv' in algorithm and not 'recommendations' in algorithm:
 
                 # results path
                 algorithm_data = f"results/csv/test/{dataset}/{algorithm}"
