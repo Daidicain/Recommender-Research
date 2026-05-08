@@ -65,32 +65,9 @@ def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
         # sum over each intersection 
         neighboursCounted[neighbour] = sum( map( adar_index_func, user_intersection ) )
 
-
-    # # sort neighbours by number of items in common with user
-    # neighboursSorted = {k: v for k, v in sorted(neighboursCounted.items(), key=lambda item: item[1])}
-
-    # # Get items that belong to user
-    # user_items = tools.extractTuple( G.edges(user) )
-    
-    # # List to recommend
-    # recommend = list()
-    # while len(recommend) < k and not len(neighboursSorted) == 0:
-    #     # grab next neighbour
-    #     neighbour = neighboursSorted.popitem()
-
-    #     # loop through neighbours items and add to recommended
-    #     for item in G.edges(neighbour[0]):
-
-    #         # if not already known
-    #         if item[1] not in user_items and len(recommend) < k:
-    #             recommend.append(item[1])
-
-    # return recommend
-
     # get common items
     common_items = set(tools.extractTuple( G.edges(related_users) ))
     
-
     # initialize all items to 0
     items_ranked = dict.fromkeys(common_items, 0)
 
@@ -111,14 +88,20 @@ def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
         for item in user_items: items_ranked.pop(item)
     except: 
         pass
-        # print('unique item')
 
     
-    # sort neighbours by number of items in common with user
+    # Sort items by key. 
+    # This creates consistent ordering where items have same score
     items_ranked = {k: v for k, v in sorted(items_ranked.items())}
+
+    # Sort items by value and drop the zeros. 
+    # This orders the items and filters irrelevant items.
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1]) if v != 0}
+
     # List to recommend
     recommend = list()
+
+    # loop through items until recommend list has k items
     while len(recommend) < k and not len(items_ranked) == 0:
         item = items_ranked.popitem()[0]
         recommend.append(item)

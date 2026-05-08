@@ -1,5 +1,7 @@
 __pycache__
 nohup.out
+venv/
+env/
 
 # These two are related to samples and don't need to be saved
 *sample.csv

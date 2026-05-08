@@ -1,6 +1,6 @@
 import networkx as nx
-import numpy as np
 import tools
+import numpy as np
 
 GRAPH = True
 
@@ -30,7 +30,7 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array,
 
     return G, None, None
 
-def recommender_algorithm(G: nx.graph, user: str, k:int, **kwargs) -> dict:
+def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
     '''
     Purpose: This function returns users in order of preferential attachment |Γ1(u)| * |Γ1(p)| 
     Parameters: A bipartite graph, the user to compare and all other users
@@ -55,33 +55,8 @@ def recommender_algorithm(G: nx.graph, user: str, k:int, **kwargs) -> dict:
         # |Γ1(u)| ∗ |Γ1(p)| 
         neighboursCounted[neighbour] = len(user_items) * len(neighbour_items)
 
-
-    # # sort neighbours by number of items in common with user
-    # neighboursSorted = {k: v for k, v in sorted(neighboursCounted.items(), key=lambda item: item[1])}
-
-    # # recommendation portion
-
-    # # Get items that belong to user
-    # user_items = tools.extractTuple( G.edges(user) )
-    
-    # # List to recommend
-    # recommend = list()
-    # while len(recommend) < k and not len(neighboursSorted) == 0:
-    #     # grab next neighbour
-    #     neighbour = neighboursSorted.popitem()
-
-    #     # loop through neighbours items and add to recommended
-    #     for item in G.edges(neighbour[0]):
-
-    #         # if not already known
-    #         if item[1] not in user_items and len(recommend) < k:
-    #             recommend.append(item[1])
-
-    # return recommend
-
     # get common items
     common_items = set(tools.extractTuple( G.edges(related_users) ))
-    
 
     # initialize all items to 0
     items_ranked = dict.fromkeys(common_items, 0)
@@ -103,14 +78,20 @@ def recommender_algorithm(G: nx.graph, user: str, k:int, **kwargs) -> dict:
         for item in user_items: items_ranked.pop(item)
     except: 
         pass
-        # print('unique item')
 
     
-    # sort neighbours by number of items in common with user
+    # Sort items by key. 
+    # This creates consistent ordering where items have same score
     items_ranked = {k: v for k, v in sorted(items_ranked.items())}
+
+    # Sort items by value and drop the zeros. 
+    # This orders the items and filters irrelevant items.
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1]) if v != 0}
+
     # List to recommend
     recommend = list()
+
+    # loop through items until recommend list has k items
     while len(recommend) < k and not len(items_ranked) == 0:
         item = items_ranked.popitem()[0]
         recommend.append(item)

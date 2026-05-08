@@ -24,28 +24,27 @@
         initialize.py                       - ensures results file structure are ready
         validation.py                       - combines results from validation tests
 
-## Python venv (Recommended)
+## Steps to run
+### 1. Python venv (Recommended)
 
-setup venv
+Setup/Active venv Windows
 
-    python -m venv .venv
-
-To activate venv Windows
-
+    python.exe -m venv .venv
     .venv\Scripts\activate
 
-To activate venv Mac/Linux
+Setup/Active venv Mac/Linux
 
+    python -m venv .venv
     source .venv/bin/activate
 
-## Install dependencies
+## 2. Install dependencies
 
     python -m pip install --upgrade -r requirements.txt
     
 
-## To initialize results file structure
+## 3. To initialize results file structure
 
-    python Implementations/initialize.py
+    python results/initialize.py
 
 
 ## To run
