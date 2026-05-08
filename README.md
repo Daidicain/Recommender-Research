@@ -25,7 +25,10 @@
         validation.py                       - combines results from validation tests
 
 ## Steps to run
-### 1. Python venv (Recommended)
+
+All python scripts are designed to be run from the root of this project directory
+
+## 1. Python venv (Recommended)
 
 Setup/Active venv Windows
 
@@ -46,10 +49,15 @@ Setup/Active venv Mac/Linux
 
     python results/initialize.py
 
+## 4. Config File
 
-## To run
+Open the Implementations/config.py file in a text editor and set the variable cpu_cores to an integer no larger than the number of threads on the cpu.
 
-Open either research.py or research_multicore.py and uncomment one item from the '''DATASETS''' and '''ALGORITHMS''' respectively. This will run the code for the uncommented dataset and algorithm chosen
+Then uncomment one Dataset and Algorithm.
+
+## 5. Run Validation
+
+In the  Implementations/config.py file the variable T_VALUES is a list containing every window size to be validated. This program will print a final score along with exporting the results to the file results/csv/Dataset/Algorithm
 
     python Implementations/research.py
 
@@ -57,6 +65,12 @@ or
 
     python Implementations/research_multicore.py
       
-*This must be run from the Experiments/ folder or the Dataset will not be found.*
+## 6. Run Test
+
+## Debug
+
+If there are issues running the multicore functions. The debug file will run the test.py program in a single process.
+
+    python Implementations/debug.py
 
 
