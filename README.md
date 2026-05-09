@@ -91,7 +91,7 @@ This is a minimal implementation. If there are issues running test.py, this vers
 
 ### Visualize test results
 
-This will create a table allowing you to compare the results from several algorithms. It does not need anything selected in the config file.
+This will create a table allowing you to compare the results from several algorithms. It does not need anything selected in the config file. It will output to the file results/output/test/
 
     python results/create_table.py
 
