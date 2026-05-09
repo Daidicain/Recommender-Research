@@ -14,7 +14,7 @@ DATASET = 'movielens'
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
 # SAVE_NAME = 'jaccard_coefficient'
-SAVE_NAME = 'ttcar'
+SAVE_NAME = 'tcar'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'time_score'
 
@@ -65,6 +65,6 @@ if SAVE_NAME == 'common_neighbours': from Algorithms.common_neighbours import *
 if SAVE_NAME == 'jaccard_coefficient': from Algorithms.jaccard_coefficient import *
 if SAVE_NAME == 'preferential_attachment': from Algorithms.preferential_attachment import *
 if SAVE_NAME == 'time_score': from Algorithms.time_score import *
-if SAVE_NAME == 'ttcar': from Algorithms.ttcar import *
+if SAVE_NAME == 'tcar': from Algorithms.tcar import *
 
 
