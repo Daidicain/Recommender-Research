@@ -16,6 +16,7 @@ if __name__=="__main__":
     
     # This will store testing information
     df_accuracy = {}
+    df_accuracy['k'] = []
     df_accuracy['user_id'] = []
     df_accuracy['precision@k'] = []
     df_accuracy['recall@k'] = []
@@ -23,7 +24,8 @@ if __name__=="__main__":
 
     # for user in ['219']:#test['user_id'].unique():
     for user in test['user_id'].unique():
-        print(user)
+        print('user: ', user)
+
         # Get items that belong to user
         user_items = train[train['user_id'] == user]['item_id']
 
@@ -31,27 +33,22 @@ if __name__=="__main__":
         if len( user_items ) == 0: continue
 
         # get recommendations
-        
         recommendations = recommender_algorithm(G=G, B=B, context_df=context_df, train=train, user=user, current_time=current_time, unique_items=unique_items,t_window=T , k=100)  
         predict = set(test[test['user_id'] == user]['item_id'].unique())
 
 
-        
-        # get test results
-        precisionAtK = tools.precisionAtK(set(recommendations),predict)
-        recallAtK = tools.recallAtK(set(recommendations),predict)
-        meanAPrecision = tools.meanAveragePrecision(set(recommendations),predict)
+        for k in range(1,101):
+            # get test results
+            precisionAtK = tools.precisionAtK(set(recommendations[:k]),predict)
+            recallAtK = tools.recallAtK(set(recommendations[:k]),predict)
+            meanAPrecision = tools.meanAveragePrecision(set(recommendations[:k]),predict)
 
-        # print(precisionAtK)
-        # input()
-
-        # add results of user to dataframe
-        df_accuracy["user_id"].append(user)
-        df_accuracy["precision@k"].append(precisionAtK)
-        df_accuracy['recall@k'].append(recallAtK)
-        df_accuracy['maPrecision'].append(meanAPrecision)
-
-        # print(df_accuracy)
+            # add results of user to dataframe
+            df_accuracy["k"].append(k)
+            df_accuracy["user_id"].append(user)
+            df_accuracy["precision@k"].append(precisionAtK)
+            df_accuracy['recall@k'].append(recallAtK)
+            df_accuracy['maPrecision'].append(meanAPrecision)
         
 
     # convert from dictionary to a dataframe
@@ -60,5 +57,5 @@ if __name__=="__main__":
     # print the results
     print(df_accuracy.describe(include='all'))
 
-    # df_accuracy.to_csv('temp')
+    df_accuracy.to_csv(f'results/csv/debug/{DATASET}/{SAVE_NAME}_{T}.csv')
 

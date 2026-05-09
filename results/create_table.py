@@ -1,19 +1,15 @@
+'''
+Purpose: This file compiles test results into a readable format. 
+Parameters: k_values in the config.py tells program what k values to store
+outputs: results to results/output/test/
+'''
+
 import pandas as pd
-
+from config import *
 import os
-
-# open csvs
-COLUMNS = ['k', 'user_id', 'precision@k', 'recall@k', 'maPrecision']
-
-# the different tests that were run
-TESTS = ['precision@k','recall@k','maPrecision']
-
-k_values = [1,5,10,20]
 
 # directory of the csv's
 directory_list = os.listdir('results/csv/test/') 
-
-
 
 # each dataset tested
 for dataset in directory_list:
@@ -24,8 +20,6 @@ for dataset in directory_list:
 
         # directory of dataset
         algorithms_list = os.listdir(f'results/csv/test/{dataset}/')
-        # algorithms_list = ['adamic_adar.csv', 'common_neighbours.csv', 'jaccard_coefficient.csv', 'link_score.csv', 'preferential_attachment.csv', 'temporal.csv', 'time_score.csv']
-
 
         # loop through each algorithm results
         for algorithm in algorithms_list:
@@ -43,24 +37,26 @@ for dataset in directory_list:
                 # get averages for each
                 algorithm_results = algorithm_results.groupby('k')[['precision@k', 'recall@k', 'maPrecision']].mean()
                 
+                # loop through each k value and store values in lists
                 for k in k_values:
+
+                    # store details
                     all_data['dataset'].append(dataset)
                     all_data['algorithm'].append(algorithm.split('.csv')[0])
                     all_data['k'].append(k)
-
+                    
+                    # store metrics
                     all_data['Precision@k'].append(algorithm_results.loc[k]['precision@k'] * 100 )
-
                     all_data['Recall@k'].append(algorithm_results.loc[k]['recall@k'] * 100 )
-
                     all_data['Mean Average Precision@k'].append(algorithm_results.loc[k]['maPrecision'] * 100 )
 
-                # print(all)
-
-
-                
-
+        # convert to dataframe
         df = pd.DataFrame(all_data, columns=all_data.keys())
-        df.to_csv(f'results/csv/test/{dataset} compiled results.csv', index=False)
+
+        # save dataframe to csv
+        df.to_csv(f'results/output/test/{dataset} compiled results.csv', index=False)
+
+        # print table
         print(df)
             
 

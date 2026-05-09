@@ -13,9 +13,13 @@ RESULTS_DIRECTORY = [
     "results/csv/validation/amazon/",
     "results/csv/validation/movielens/",
     "results/csv/validation/epinions/",
+    "results/csv/debug/amazon/",
+    "results/csv/debug/movielens/",
+    "results/csv/debug/epinions/",
     "results/output/validation/amazon/",
     "results/output/validation/movielens/",
     "results/output/validation/epinions/",
+    "results/output/test/",
 ]
 
 # loop through each directory given

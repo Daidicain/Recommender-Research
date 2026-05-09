@@ -155,7 +155,7 @@ def main(T, B):
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     # save results to file
-    df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_B={SAVE_NAME}_A={T}.csv')
+    df_accuracy.to_csv(f'results/csv/validation/{DATASET}/{SAVE_NAME}_{T}.csv')
 
     # clear line
     print('\x1b[2K', end='\n')

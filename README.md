@@ -2,27 +2,33 @@
 
 ## Folder/File explanations
 
-    Datasets/ - Contains all Datasets
+    Datasets/                               - Contains all Datasets
+
+    requirements.txt                        - Contains the required python modules
 
     Implementations/                        - Contains all code for experimentation
+
         Algorithms/                         - Contains code for each Algorithm
-        data_info.py                        - Contains constants for opening each Dataset
-        research.py                         - single processor main file
-        research_multicore.py               - multiprocessor main file
-        research_multicore Validation.py    - code for validation
+        config.py                           - Contains configurable variables
+        debug.py                            - runs program on one process
+        test.py                             - code for test
+        validation.py                       - code for validation
         tools.py                            - Contains functions used commonly
 
-    results/                                - Contains collected results from test
-        csv/                                - raw output from main
-            test/                           - raw output from main in test mode
-            validation/                     - raw output from main in validation mode
-        output/                             - cleaned and reformated data 
-            test/                           - 
-            validation/
-            time_results.json
-        graph data.py                       - takes results from csv/test/ then saves graphs in output/test/
-        initialize.py                       - ensures results file structure are ready
-        validation.py                       - combines results from validation tests
+    results/                                - handles the result outputs and formatting
+        csv/                               
+            test/                           - raw output from test.py
+            validation/                     - raw output from validation.py
+            debug/                          - raw output from debug.py
+        output/                         
+            test/                           - formatted test output
+            validation/                     - formatted validation output
+            time_results.json               - run times for each algorithm
+
+        config.py                           - Contains configurable variables 
+        initialize.py                       - ensures results file structures are ready
+        validation.py                       - formats the validation raw outputs into readable format
+        create_table.py                     - formats the test raw outputs into readable format
 
 ## Steps to run
 
@@ -57,19 +63,20 @@ Then uncomment one Dataset and Algorithm.
 
 ## 5. Run Validation
 
-In the  Implementations/config.py file the variable T_VALUES is a list containing every window size to be validated. This program will print a final score along with exporting the results to the file results/csv/Dataset/Algorithm
+In the Implementations/config.py file, the variable T_VALUES is a list containing every window size to be validated. This program will print a final summary. It will also export the results to the file results/csv/validation/Dataset/Algorithm.csv.
 
-    python Implementations/research.py
+*Note the Validation step should only be run on ttcar Algorithm*
 
-or
-
-    python Implementations/research_multicore.py
+    python Implementations/validation.py
       
 ## 6. Run Test
 
-## Debug
+In the Implementations/config.py file, the variable T should be set the an appropriate window size. This program will print a final summary. It will also export the results to the file results/csv/test/Dataset/Algorithm.csv.
 
-If there are issues running the multicore functions. The debug file will run the test.py program in a single process.
+    python Implementations/test.py
+
+## Debug
+This is a minimal implementation. If there are issues running test.py and validation.py; this version will run as a single process. It will print a final summary. It will also export the results to the file results/csv/debug/Dataset/Algorithm.csm.
 
     python Implementations/debug.py
 

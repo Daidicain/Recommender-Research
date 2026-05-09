@@ -175,7 +175,7 @@ def main(T, B):
     print(df_accuracy[df_accuracy['k'] == 10].describe(include='all'))
 
     # save results to file
-    df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}.csv')
+    df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}_{T}.csv')
 
     # clear line
     print('\x1b[2K', end='\n')
