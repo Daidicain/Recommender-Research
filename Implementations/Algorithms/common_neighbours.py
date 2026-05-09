@@ -30,11 +30,11 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array,
 
     return G, None, None
 
-def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> dict:
+def recommender_algorithm(G: nx.graph, user: str, k: int, **kwargs) -> list:
     '''
-    Purpose: This function returns all similar users and how similar they are based on (neighbour ∩ user)
-    Parameters: A bipartite graph, the user to compare and all other users
-    Return: a sorted dict of similar users and their scores
+    Purpose: This function returns k best recommendations in order of best to worst
+    Parameters: A bipartite graph, the user to compare and k number of items to recommend
+    Return: a list of best to worst recommendations
     '''
     if k <= 0: raise Exception("Cannot recommend when k <= 0")
     

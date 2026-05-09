@@ -32,34 +32,47 @@ def initialize_structures(train, unique_users: np.array, unique_items: np.array,
     'value': float64
 })
 def time_score_helper(ratings, time_stamps, current_time, length, B):
+    '''
+    Purpose: Calculates the weight of the paths
+    Parameters: ratings on paths, time stamps on paths, the current time, length the number of paths, and B the importance of time
+    Return: sum of all path weights
+    '''
     ratings = np.asarray(ratings, dtype=np.float64)
     assert ratings.ndim == 2
 
     all_links = np.empty(length, dtype=np.float64)
 
+    # loop through each path
     for i in prange(length):
         harmonic_mean = 0.0
+
+        # calculate the harmonic mean
         for j in prange(3):
             value = 1.0 / ratings[i, j]
             harmonic_mean += value
+
         harmonic_mean = 3.0 / harmonic_mean
 
+        # calculate some variables
         latest_time = np.max(time_stamps[i])
         oldest_time = np.min(time_stamps[i])
         recency = current_time - latest_time
         time_span = latest_time - oldest_time + 1
 
+        # calculate score
         score = (harmonic_mean * (B ** recency)) / time_span
+
+        # store score
         all_links[i] = score
 
     return np.sum(all_links) 
 
 # @jit(forceobj=True, nogil=True)
-def recommender_algorithm(train: pd.DataFrame, user: str, unique_items, current_time: int, B: int, k: int, **kwargs) -> dict:
+def recommender_algorithm(train: pd.DataFrame, user: str, unique_items, current_time: int, B: int, k: int, **kwargs) -> np.array:
     '''
-    Purpose: This function returns users in order of preferential attachment |Γ1(u)| * |Γ1(p)| 
-    Parameters: A bipartite graph, the user to compare and all other users, L max length of path, B a damping factor (0< B <1)
-    Return: a sorted dict of similar users and their scores
+    Purpose: This rates each potential recommendations, then returns top k recommendations
+    Parameters: The train dataframe, the user to recommend to, the unique items, the current time, B the importance of time, and k number of recommendations.
+    Return: array of items from best to worst
     '''
 
     train2 = train[['user_id','item_id', 'rating', 'years']]
@@ -70,32 +83,28 @@ def recommender_algorithm(train: pd.DataFrame, user: str, unique_items, current_
     # Get items that belong to user
     user_items = temp1['item_id_x'].unique()
 
-    # print(user_items)
-    # input()
-
     # Get items that the user does not have
     potential_items = unique_items[np.isin(unique_items, user_items, invert=True)]
-    
-    # print(len(potential_items))
-    # input()
 
     TS = np.empty(len(potential_items), dtype=np.float64)
     t =time.time()
     for i in range(len(potential_items)):
-        # print(potential_items[i])
-
+        
+        # prepare table 2
         temp2 = train2[train2['item_id']==potential_items[i]].add_suffix("_z")
 
-        # temp3 = train2[(train2['item_id'].isin(user_items)) | (train['user_id'].isin(item_users))].add_suffix("_y")
+        # prepare table 3
         temp3 = train2.add_suffix("_y")
- 
+
+        # inner merge tables to create all paths
         result = pd.DataFrame.merge(temp1,temp3, left_on='item_id_x', right_on='item_id_y', how='inner')
-        
         result = pd.DataFrame.merge(result,temp2, left_on='user_id_y', right_on='user_id_z',how='inner')
         
+        # get ratings and time stamps as contiguous arrays
         ratings = np.ascontiguousarray(result[['rating_x', "rating_y", "rating_z"]].values, dtype=np.int64)
         time_stamps = np.array(result[['years_x', "years_y", "years_z"]].values, dtype=np.int64) 
 
+        # calculate weight of potential item.
         TS[i] = time_score_helper(ratings,time_stamps, current_time, len(ratings), B)
         
     
@@ -108,9 +117,6 @@ def recommender_algorithm(train: pd.DataFrame, user: str, unique_items, current_
     # Sort items by score
     # itemsSorted = itemsSorted.sort_values(by='score', ascending=False)
     itemsSorted = itemsSorted.sort_values(by=['score', 'items'], ascending=False)
-    print(itemsSorted)
-
-    # print('time taken:',time.time() - t)
 
     # return top k
     return itemsSorted.head(k)['items']

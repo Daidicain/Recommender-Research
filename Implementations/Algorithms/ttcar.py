@@ -10,6 +10,9 @@ GRAPH = False
 def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, rating:np.ascontiguousarray, t_window: int, size: int, minimum_size: int) -> np.array:
     '''
     Purpose: This is a generator that generates all subsets of size t_window
+
+             from paper: 3 Calculate Set of Sets SET (IT ) for a Given Set of (it, ts) Pairs IT
+
     Parameters: 
         Items -> Items that belong to user
         Timestamps -> when an item was rated
@@ -58,10 +61,14 @@ def get_subsets( items: np.ascontiguousarray, timestamps:np.ascontiguousarray, r
             new_window:bool = False
 
             yield window, window_ratings, window_ts
+            
 
 def get_clic( user, t_window, train):
     '''
     Purpose: Clusters subsets by overlap
+
+             from paper: Algorithm 5 Calculate Set of Contexts CX(u∗) for User u∗
+
     Paramters: user, windowsize, and data
     Return: set of items clustered
     '''
@@ -137,17 +144,7 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
         items: np.ascontiguousarray = np.ascontiguousarray(user_data['item_id'].values, dtype=np.int64)
         timestamps: np.ascontiguousarray = np.ascontiguousarray(user_data['ts'].values, dtype=np.int64)
         ratings: np.ascontiguousarray = np.ascontiguousarray(user_data['rating'].values, dtype=np.float64)
-        # print(1)
-        # for item in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
-        #     print( item[0])
-        # print(2)
-        # for item in get_subsets(items, timestamps, ratings, t_window, len(user_data), 1):
-        #     print( item[0])
 
-        # print(items)
-        # input()
-        # print(*list(get_subsets(items, timestamps, t_window, len(user_data))), sep='\n')
-        # input()
         # record all subsets for user
         for subset, subset_rating, subset_ts in get_subsets(items, timestamps, ratings, t_window, len(user_data), 2):
             
@@ -173,11 +170,11 @@ def initialize_structures(train: np.array, unique_users: np.array, t_window: int
 
 
 
-def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: str, t_window:int, k: int, **kwargs) -> dict:
+def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: str, t_window:int, k: int, **kwargs) -> list:
     '''
-    Purpose: This function returns all similar users and how similar they are
-    Parameters: A bipartite graph, the user to compare and all other users
-    Return: a sorted dict of similar users and their scores
+    Purpose: This function returns k best recommendations in order of best to worst
+    Parameters: A dataframe that contains the context groups, the train dataset, the user to compare, the window size
+     Return: a list of best to worst recommendations
     '''
     if k <= 0: raise Exception("Cannot recommend when k <= 0")
     
@@ -192,13 +189,7 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
     related_users = context_df[ context_df['item_id'].isin(items) ]['user_id'].unique()
     related_context_table = context_df[ context_df['user_id'].isin(related_users) ]
     related_context_table = context_df[ context_df['user_id'] != user ].sort_values(['context'])
-    # related_context_table = context_df[ context_df['item_id'].isin(items) & context_df['user_id'] != user ].sort_values(['context'])
-    
-
-    # related_context = related_context_table['context'].unique()
-
-
-    
+      
     # get common items
     # initialize all items to 0
     common_items = train['item_id'].unique()
@@ -209,17 +200,8 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
 
     for user_click in  get_clic(user,t_window, train):
         for context, context_table in related_context_table.groupby('context'):
-        # for context in related_context:
 
-            # print(f'name {context}')
-            # print(context)
             context_items = context_table['item_id'].to_list()
-            
-            
-            
-            # context_items_table = related_context_table[ related_context_table['context'] == context ]
-            # print(len(related_context_table), len(context_items_table))
-            # context_items = context_items_table['item_id']
            
             # (neighbour ∩ user) / (neighbour U user)
             common_items = user_click.intersection(context_items)
@@ -231,15 +213,10 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
 
             # loop through neighbours items
             for item in context_items:
-                # if item == 50:
-                #     print(contextCounted[context])
 
                 # increment item by rank amount
                 items_ranked[item] += contextCounted[context]
-        # print(3,time.time()-t)
-            
-            # print('dict', time.time() - t)
-        # input()
+
     # remove known items
     try: 
         for item in items: items_ranked.pop(item)
@@ -247,14 +224,18 @@ def recommender_algorithm(context_df: pd.DataFrame, train: pd.DataFrame, user: s
         pass
 
     
-    # sort neighbours by number of items in common with user
+    # Sort items by key. 
+    # This creates consistent ordering where items have same score
     items_ranked = {k: v for k, v in sorted(items_ranked.items())}
+
+    # Sort items by value and drop the zeros. 
+    # This orders the items and filters irrelevant items.
     items_ranked = {k: v for k, v in sorted(items_ranked.items(), key=lambda item: item[1]) if v != 0}
-    # print(len(items_ranked.keys()))
-    # print(items_ranked)
-    # input()
+
     # List to recommend
     recommend = list()
+
+    # loop through items until recommend list has k items
     while len(recommend) < k and not len(items_ranked) == 0:
         item = items_ranked.popitem()[0]
         recommend.append(item)

@@ -57,5 +57,5 @@ if __name__=="__main__":
     # print the results
     print(df_accuracy.describe(include='all'))
 
-    df_accuracy.to_csv(f'results/csv/debug/{DATASET}/{SAVE_NAME}_{T}.csv')
+    df_accuracy.to_csv(f'results/csv/test/{DATASET}/{SAVE_NAME}_{T}.csv')
 

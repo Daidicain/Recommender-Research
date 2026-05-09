@@ -68,6 +68,14 @@ In the Implementations/config.py file, the variable T_VALUES is a list containin
 *Note the Validation step should only be run on ttcar Algorithm*
 
     python Implementations/validation.py
+
+### Visualize validation results
+
+Select dataset in results/config.py file. Then run
+
+    python results/validation.py
+
+The results will produce a formatted output in the folder results/output/validation/dataset/
       
 ## 6. Run Test
 
@@ -75,9 +83,17 @@ In the Implementations/config.py file, the variable T should be set the an appro
 
     python Implementations/test.py
 
-## Debug
-This is a minimal implementation. If there are issues running test.py and validation.py; this version will run as a single process. It will print a final summary. It will also export the results to the file results/csv/debug/Dataset/Algorithm.csm.
+### Debug Alternative
+
+This is a minimal implementation. If there are issues running test.py, this version will run as a single process. It will print a final summary. It will also export the results to the file results/csv/test/Dataset/Algorithm.csv. It uses the same parameters in the config.py as test.py.
 
     python Implementations/debug.py
+
+### Visualize test results
+
+This will create a table allowing you to compare the results from several algorithms. It does not need anything selected in the config file.
+
+    python results/create_table.py
+
 
 

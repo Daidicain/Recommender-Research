@@ -1,6 +1,6 @@
 __pycache__
 nohup.out
-venv/
+.venv/
 env/
 
 # These two are related to samples and don't need to be saved

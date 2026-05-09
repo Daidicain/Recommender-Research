@@ -13,15 +13,15 @@ DATASET = 'movielens'
 '''ALGORITHMS'''
 # SAVE_NAME = 'adamic_adar'
 # SAVE_NAME = 'common_neighbours'
-SAVE_NAME = 'jaccard_coefficient'
-# SAVE_NAME = 'ttcar'
+# SAVE_NAME = 'jaccard_coefficient'
+SAVE_NAME = 'ttcar'
 # SAVE_NAME = 'preferential_attachment'
 # SAVE_NAME = 'time_score'
 
 '''VARIABLES'''
 A = 1000000000
 B = 0.5
-T = 1000000000
+T = 1000
 
 '''VALIDATION TESTS'''
 B_VALUES = ["subset"]
