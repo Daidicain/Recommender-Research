@@ -2,33 +2,33 @@
 
 ## Folder/File explanations
 
-    Datasets/                               - Contains all Datasets
+    Datasets/                   - Contains all Datasets
 
-    requirements.txt                        - Contains the required python modules
+    requirements.txt            - Contains the required python modules
 
-    Implementations/                        - Contains all code for experimentation
+    Implementations/            - Contains all code for experimentation
 
-        Algorithms/                         - Contains code for each Algorithm
-        config.py                           - Contains configurable variables
-        debug.py                            - runs program on one process
-        test.py                             - code for test
-        validation.py                       - code for validation
-        tools.py                            - Contains functions used commonly
+        Algorithms/             - Contains code for each Algorithm
+        config.py               - Contains configurable variables
+        debug.py                - runs program on one process
+        test.py                 - code for test
+        validation.py           - code for validation
+        tools.py                - Contains functions used commonly
 
-    results/                                - handles the result outputs and formatting
-        csv/                               
-            test/                           - raw output from test.py
-            validation/                     - raw output from validation.py
-            debug/                          - raw output from debug.py
-        output/                         
-            test/                           - formatted test output
-            validation/                     - formatted validation output
-            time_results.json               - run times for each algorithm
+    results/                    - handles the result outputs and formatting
+        csv/              
+            test/               - raw output from test.py
+            validation/         - raw output from validation.py
+            debug/              - raw output from debug.py
+        output/        
+            test/               - formatted test output
+            validation/         - formatted validation output
+            time_results.json   - run times for each algorithm
 
-        config.py                           - Contains configurable variables 
-        initialize.py                       - ensures results file structures are ready
-        validation.py                       - formats the validation raw outputs into readable format
-        create_table.py                     - formats the test raw outputs into readable format
+        config.py               - Contains configurable variables 
+        initialize.py           - ensures results file structures are ready
+        validation.py           - formats the validation raw outputs into readable format
+        create_table.py         - formats the test raw outputs into readable format
 
 ## Steps to run
 
